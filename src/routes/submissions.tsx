@@ -1,0 +1,198 @@
+import { useState } from "react";
+import { createFileRoute } from "@tanstack/react-router";
+import { Check } from "lucide-react";
+import { useI18n } from "@/i18n";
+import { contactDetails } from "@/data/content";
+import { PageHeader } from "@/components/site/PageHeader";
+
+export const Route = createFileRoute("/submissions")({
+  head: () => ({
+    meta: [
+      { title: "Υποβολές — MODUS LEGENDI" },
+      {
+        name: "description",
+        content:
+          "Οδηγίες και φόρμα υποβολής για δοκίμια, κριτικές βιβλίου και μεταφράσεις στο περιοδικό MODUS LEGENDI.",
+      },
+      { property: "og:title", content: "Υποβολές — MODUS LEGENDI" },
+      { property: "og:description", content: "Οδηγίες υποβολής κειμένων και μεταφράσεων." },
+    ],
+  }),
+  component: SubmissionsPage,
+});
+
+function SubmissionsPage() {
+  const { t } = useI18n();
+  const [sent, setSent] = useState(false);
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    type: "essay",
+    title: "",
+    language: "el",
+    abstract: "",
+  });
+  const [errors, setErrors] = useState<Record<string, string>>({});
+
+  const submit = (event: React.FormEvent) => {
+    event.preventDefault();
+    const next: Record<string, string> = {};
+    if (!form.name.trim()) next['name'] = t.form.required;
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) next['email'] = t.form.invalidEmail;
+    if (!form.title.trim()) next['title'] = t.form.required;
+    if (form.abstract.trim().length < 20) next['abstract'] = t.form.tooShort;
+    setErrors(next);
+    if (Object.keys(next).length === 0) setSent(true);
+  };
+
+  return (
+    <div>
+      <PageHeader kicker={t.brand} title={t.submissions.title} intro={t.submissions.intro} />
+
+      <div className="mx-auto grid w-full max-w-6xl gap-10 px-5 py-14 sm:px-8 sm:py-20 lg:grid-cols-[1fr_1.3fr] lg:gap-16">
+        <aside>
+          <h2 className="text-3xl">{t.submissions.guidelinesTitle}</h2>
+          <ul className="mt-6 space-y-4 border-t border-border pt-6">
+            {t.submissions.guidelines.map((item) => (
+              <li key={item} className="text-sm leading-relaxed text-muted-foreground">
+                {item}
+              </li>
+            ))}
+          </ul>
+          <p className="mt-8 text-sm text-muted-foreground">{contactDetails.submissionsEmail}</p>
+        </aside>
+
+        <section>
+          <h2 className="text-3xl">{t.submissions.formTitle}</h2>
+          {sent ? (
+            <p className="mt-6 flex items-start gap-3 border border-accent/40 bg-accent/10 p-5 text-sm text-accent">
+              <Check aria-hidden className="mt-0.5 size-4 shrink-0" />
+              <span>{t.submissions.success}</span>
+            </p>
+          ) : (
+            <form onSubmit={submit} noValidate className="mt-6 grid gap-4 sm:grid-cols-2">
+              <TextField
+                id="sub-name"
+                label={t.submissions.fields.name}
+                value={form.name}
+                error={errors['name']}
+                onChange={(value) => setForm({ ...form, name: value })}
+              />
+              <TextField
+                id="sub-email"
+                type="email"
+                label={t.submissions.fields.email}
+                value={form.email}
+                error={errors['email']}
+                onChange={(value) => setForm({ ...form, email: value })}
+              />
+              <div>
+                <label htmlFor="sub-type" className="rule-label">
+                  {t.submissions.fields.type}
+                </label>
+                <select
+                  id="sub-type"
+                  value={form.type}
+                  onChange={(event) => setForm({ ...form, type: event.target.value })}
+                  className="mt-2 w-full border border-input bg-background px-4 py-3 text-sm outline-none focus-visible:border-accent"
+                >
+                  <option value="essay">{t.submissions.types.essay}</option>
+                  <option value="review">{t.submissions.types.review}</option>
+                  <option value="translation">{t.submissions.types.translation}</option>
+                  <option value="interview">{t.submissions.types.interview}</option>
+                </select>
+              </div>
+              <div>
+                <label htmlFor="sub-language" className="rule-label">
+                  {t.submissions.fields.language}
+                </label>
+                <select
+                  id="sub-language"
+                  value={form.language}
+                  onChange={(event) => setForm({ ...form, language: event.target.value })}
+                  className="mt-2 w-full border border-input bg-background px-4 py-3 text-sm outline-none focus-visible:border-accent"
+                >
+                  <option value="el">Ελληνικά</option>
+                  <option value="en">English</option>
+                  <option value="de">Deutsch</option>
+                </select>
+              </div>
+              <div className="sm:col-span-2">
+                <TextField
+                  id="sub-title"
+                  label={t.submissions.fields.title}
+                  value={form.title}
+                  error={errors['title']}
+                  onChange={(value) => setForm({ ...form, title: value })}
+                />
+              </div>
+              <div className="sm:col-span-2">
+                <label htmlFor="sub-abstract" className="rule-label">
+                  {t.submissions.fields.abstract}
+                </label>
+                <textarea
+                  id="sub-abstract"
+                  rows={5}
+                  value={form.abstract}
+                  onChange={(event) => setForm({ ...form, abstract: event.target.value })}
+                  aria-invalid={Boolean(errors['abstract'])}
+                  aria-describedby={errors['abstract'] ? "sub-abstract-error" : undefined}
+                  className="mt-2 w-full border border-input bg-background px-4 py-3 text-sm outline-none focus-visible:border-accent"
+                />
+                {errors['abstract'] ? (
+                  <p id="sub-abstract-error" className="mt-1 text-xs text-destructive">
+                    {errors['abstract']}
+                  </p>
+                ) : null}
+              </div>
+              <button
+                type="submit"
+                className="justify-self-start bg-foreground px-5 py-3 text-sm tracking-wide text-background transition-opacity hover:opacity-90 sm:col-span-2"
+              >
+                {t.actions.submit}
+              </button>
+            </form>
+          )}
+        </section>
+      </div>
+    </div>
+  );
+}
+
+function TextField({
+  id,
+  label,
+  value,
+  onChange,
+  error,
+  type = "text",
+}: {
+  id: string;
+  label: string;
+  value: string;
+  onChange: (value: string) => void;
+  error?: string | undefined;
+  type?: string | undefined;
+}) {
+  return (
+    <div>
+      <label htmlFor={id} className="rule-label">
+        {label}
+      </label>
+      <input
+        id={id}
+        type={type}
+        value={value}
+        onChange={(event) => onChange(event.target.value)}
+        aria-invalid={Boolean(error)}
+        aria-describedby={error ? `${id}-error` : undefined}
+        className="mt-2 w-full border border-input bg-background px-4 py-3 text-sm outline-none focus-visible:border-accent"
+      />
+      {error ? (
+        <p id={`${id}-error`} className="mt-1 text-xs text-destructive">
+          {error}
+        </p>
+      ) : null}
+    </div>
+  );
+}
