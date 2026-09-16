@@ -12,12 +12,14 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as ContactRouteImport } from './routes/contact'
+import { Route as LoginRouteImport } from './routes/login'
 import { Route as MagazineRouteImport } from './routes/magazine'
 import { Route as ReadingGroupRouteImport } from './routes/reading-group'
 import { Route as SearchRouteImport } from './routes/search'
 import { Route as SubmissionsRouteImport } from './routes/submissions'
 import { Route as ArticlesIndexRouteImport } from './routes/articles.index'
 import { Route as ArticlesSlugRouteImport } from './routes/articles.$slug'
+import { Route as ProfileUsernameRouteImport } from './routes/profile/$username'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -32,6 +34,11 @@ const AboutRoute = AboutRouteImport.update({
 const ContactRoute = ContactRouteImport.update({
   id: '/contact',
   path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MagazineRoute = MagazineRouteImport.update({
@@ -64,27 +71,36 @@ const ArticlesSlugRoute = ArticlesSlugRouteImport.update({
   path: '/articles/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ProfileUsernameRoute = ProfileUsernameRouteImport.update({
+  id: '/profile/$username',
+  path: '/profile/$username',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/contact': typeof ContactRoute
+  '/login': typeof LoginRoute
   '/magazine': typeof MagazineRoute
   '/reading-group': typeof ReadingGroupRoute
   '/search': typeof SearchRoute
   '/submissions': typeof SubmissionsRoute
   '/articles/$slug': typeof ArticlesSlugRoute
+  '/profile/$username': typeof ProfileUsernameRoute
   '/articles/': typeof ArticlesIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/contact': typeof ContactRoute
+  '/login': typeof LoginRoute
   '/magazine': typeof MagazineRoute
   '/reading-group': typeof ReadingGroupRoute
   '/search': typeof SearchRoute
   '/submissions': typeof SubmissionsRoute
   '/articles/$slug': typeof ArticlesSlugRoute
+  '/profile/$username': typeof ProfileUsernameRoute
   '/articles': typeof ArticlesIndexRoute
 }
 export interface FileRoutesById {
@@ -92,11 +108,13 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/contact': typeof ContactRoute
+  '/login': typeof LoginRoute
   '/magazine': typeof MagazineRoute
   '/reading-group': typeof ReadingGroupRoute
   '/search': typeof SearchRoute
   '/submissions': typeof SubmissionsRoute
   '/articles/$slug': typeof ArticlesSlugRoute
+  '/profile/$username': typeof ProfileUsernameRoute
   '/articles/': typeof ArticlesIndexRoute
 }
 export interface FileRouteTypes {
@@ -105,33 +123,39 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/contact'
+    | '/login'
     | '/magazine'
     | '/reading-group'
     | '/search'
     | '/submissions'
     | '/articles/$slug'
+    | '/profile/$username'
     | '/articles/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/about'
     | '/contact'
+    | '/login'
     | '/magazine'
     | '/reading-group'
     | '/search'
     | '/submissions'
     | '/articles/$slug'
+    | '/profile/$username'
     | '/articles'
   id:
     | '__root__'
     | '/'
     | '/about'
     | '/contact'
+    | '/login'
     | '/magazine'
     | '/reading-group'
     | '/search'
     | '/submissions'
     | '/articles/$slug'
+    | '/profile/$username'
     | '/articles/'
   fileRoutesById: FileRoutesById
 }
@@ -139,11 +163,13 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
   ContactRoute: typeof ContactRoute
+  LoginRoute: typeof LoginRoute
   MagazineRoute: typeof MagazineRoute
   ReadingGroupRoute: typeof ReadingGroupRoute
   SearchRoute: typeof SearchRoute
   SubmissionsRoute: typeof SubmissionsRoute
   ArticlesSlugRoute: typeof ArticlesSlugRoute
+  ProfileUsernameRoute: typeof ProfileUsernameRoute
   ArticlesIndexRoute: typeof ArticlesIndexRoute
 }
 
@@ -168,6 +194,13 @@ declare module '@tanstack/react-router' {
       path: '/contact'
       fullPath: '/contact'
       preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/magazine': {
@@ -212,6 +245,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ArticlesSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/profile/$username': {
+      id: '/profile/$username'
+      path: '/profile/$username'
+      fullPath: '/profile/$username'
+      preLoaderRoute: typeof ProfileUsernameRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -219,11 +259,13 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
   ContactRoute: ContactRoute,
+  LoginRoute: LoginRoute,
   MagazineRoute: MagazineRoute,
   ReadingGroupRoute: ReadingGroupRoute,
   SearchRoute: SearchRoute,
   SubmissionsRoute: SubmissionsRoute,
   ArticlesSlugRoute: ArticlesSlugRoute,
+  ProfileUsernameRoute: ProfileUsernameRoute,
   ArticlesIndexRoute: ArticlesIndexRoute,
 }
 export const routeTree = rootRouteImport

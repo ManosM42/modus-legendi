@@ -12,6 +12,7 @@ import { useEffect, type ReactNode } from "react";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { I18nProvider, useI18n } from "@/i18n";
+import { AuthProvider } from "@/contexts/AuthContext";
 import { Navbar } from "@/components/site/Navbar";
 import { Footer } from "@/components/site/Footer";
 import { IntroLoader } from "@/components/site/IntroLoader";
@@ -64,8 +65,8 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
           >
             Try again
           </button>
-          <a
-            href="/"
+          
+          <a  href="/"
             className="inline-flex items-center justify-center rounded-md border border-input bg-background px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-accent"
           >
             Go home
@@ -138,17 +139,19 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <I18nProvider>
-        <IntroLoader />
-        <div className="flex min-h-dvh flex-col">
-          <SkipLink />
-          <Navbar />
-          <main id="main-content" tabIndex={-1} className="flex-1 focus-visible:outline-none">
-            <Outlet />
-          </main>
-          <Footer />
-        </div>
-      </I18nProvider>
+      <AuthProvider>
+        <I18nProvider>
+          <IntroLoader />
+          <div className="flex min-h-dvh flex-col">
+            <SkipLink />
+            <Navbar />
+            <main id="main-content" tabIndex={-1} className="flex-1 focus-visible:outline-none">
+              <Outlet />
+            </main>
+            <Footer />
+          </div>
+        </I18nProvider>
+      </AuthProvider>
     </QueryClientProvider>
   );
 }

@@ -1,8 +1,10 @@
 import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { Link, useRouterState } from "@tanstack/react-router";
-import { Menu, Search, X } from "lucide-react";
+import { Search } from "lucide-react";
 import { useI18n } from "@/i18n";
 import { cn } from "@/lib/utils";
+import { useAuth } from "@/contexts/AuthContext";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import { SearchPanel } from "./SearchPanel";
 
@@ -18,6 +20,176 @@ const links = [
 const focusRing =
   "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring";
 
+function AuthButton({ className }: { className?: string }) {
+  const { session, profile } = useAuth();
+
+  if (session) {
+    return (
+      <Link
+        to="/profile/$username"
+        params={{ username: profile?.username ?? "" }}
+        className={cn(
+          "flex items-center gap-3 font-mono text-xs uppercase tracking-[0.16em] text-muted-foreground transition-colors hover:text-accent",
+          focusRing,
+          className,
+        )}
+      >
+        {profile?.avatar_url ? (
+          <img
+            src={profile.avatar_url}
+            alt={profile.name}
+            className="size-8 rounded-full object-cover border border-border"
+          />
+        ) : (
+          <span className="flex size-8 items-center justify-center rounded-full bg-accent text-accent-foreground text-sm font-semibold">
+            {profile?.name?.charAt(0).toUpperCase() ?? "?"}
+          </span>
+        )}
+        <span>{profile?.username ?? "Profile"}</span>
+      </Link>
+    );
+  }
+
+  return (
+    <Link
+      to="/login"
+      className={cn(
+        "flex min-h-11 items-center border border-border px-4 font-mono text-xs uppercase tracking-[0.16em] text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground",
+        focusRing,
+        className,
+      )}
+    >
+      Sign in
+    </Link>
+  );
+}
+
+function HamburgerIcon({ open }: { open: boolean }) {
+  return (
+    <span className="relative flex h-4 w-5 flex-col justify-between" aria-hidden="true">
+      <span
+        className={cn(
+          "block h-0.5 w-full origin-center rounded-full bg-current transition-transform duration-300 ease-out",
+          open && "translate-y-[7px] rotate-45",
+        )}
+      />
+      <span
+        className={cn(
+          "block h-0.5 w-full rounded-full bg-current transition-opacity duration-200 ease-out",
+          open && "opacity-0",
+        )}
+      />
+      <span
+        className={cn(
+          "block h-0.5 w-full origin-center rounded-full bg-current transition-transform duration-300 ease-out",
+          open && "-translate-y-[7px] -rotate-45",
+        )}
+      />
+    </span>
+  );
+}
+
+function MenuOverlay({
+  open,
+  onClose,
+  panelRef,
+}: {
+  open: boolean;
+  onClose: () => void;
+  panelRef: React.RefObject<HTMLDivElement>;
+}) {
+  const { t } = useI18n();
+  const pathname = useRouterState({ select: (state) => state.location.pathname });
+  const isActive = (to: string) => (to === "/" ? pathname === "/" : pathname.startsWith(to));
+
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) return null;
+
+  return createPortal(
+    <div
+      id="site-menu"
+      role="dialog"
+      aria-modal="true"
+      aria-label={t.nav.menu}
+      className={cn(
+        "fixed inset-0 z-[9999] flex flex-col bg-background",
+        "supports-[backdrop-filter]:bg-background/98 supports-[backdrop-filter]:backdrop-blur-xl",
+        "transition-[opacity,transform] duration-300 ease-out",
+        open
+          ? "pointer-events-auto translate-y-0 opacity-100"
+          : "pointer-events-none -translate-y-2 opacity-0",
+      )}
+    >
+      <div className="flex items-center justify-end px-5 py-4 sm:px-8">
+        <button
+          type="button"
+          onClick={onClose}
+          aria-label={t.nav.close}
+          className={cn(
+            "flex min-h-11 min-w-11 items-center justify-center border border-border text-foreground transition-colors hover:bg-secondary",
+            focusRing,
+          )}
+        >
+          <HamburgerIcon open={true} />
+        </button>
+      </div>
+
+      <div
+        ref={panelRef}
+        className="mx-auto flex w-full max-w-6xl flex-1 flex-col justify-between overflow-y-auto px-5 pb-10 sm:px-8"
+      >
+        <nav>
+          <ul className="grid gap-2 sm:gap-3">
+            {links.map((link, i) => (
+              <li
+                key={link.to}
+                className={cn(
+                  "overflow-hidden transition-all duration-300 ease-out",
+                  open ? "translate-y-0 opacity-100" : "translate-y-3 opacity-0",
+                )}
+                style={{ transitionDelay: open ? `${i * 50}ms` : "0ms" }}
+              >
+                <Link
+                  to={link.to}
+                  activeOptions={{ exact: link.to === "/" }}
+                  aria-current={isActive(link.to) ? "page" : undefined}
+                  onClick={onClose}
+                  className={cn(
+                    "group flex items-baseline gap-4 border-b border-border py-4 font-display text-4xl transition-colors hover:text-accent sm:text-6xl",
+                    isActive(link.to) ? "text-accent" : "text-foreground",
+                    focusRing,
+                  )}
+                >
+                  <span className="font-mono text-xs text-muted-foreground group-hover:text-accent">
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                  {t.nav[link.key]}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </nav>
+
+        <div
+          className={cn(
+            "mt-8 flex flex-wrap items-center gap-4 transition-all duration-300 ease-out",
+            open ? "translate-y-0 opacity-100" : "translate-y-3 opacity-0",
+          )}
+          style={{ transitionDelay: open ? `${links.length * 50 + 60}ms` : "0ms" }}
+        >
+          <AuthButton className="sm:hidden" />
+          <LanguageSwitcher className="sm:hidden" />
+        </div>
+      </div>
+    </div>,
+    document.body,
+  );
+}
+
 export function Navbar() {
   const { t } = useI18n();
   const [menuOpen, setMenuOpen] = useState(false);
@@ -25,7 +197,7 @@ export function Navbar() {
   const pathname = useRouterState({ select: (state) => state.location.pathname });
   const menuButtonRef = useRef<HTMLButtonElement>(null);
   const searchButtonRef = useRef<HTMLButtonElement>(null);
-  const menuRef = useRef<HTMLDivElement>(null);
+  const panelRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setMenuOpen(false);
@@ -33,7 +205,8 @@ export function Navbar() {
 
   useEffect(() => {
     if (!menuOpen) return undefined;
-    const first = menuRef.current?.querySelector<HTMLElement>("a[href]");
+    document.body.style.overflow = "hidden";
+    const first = panelRef.current?.querySelector<HTMLElement>("a[href]");
     first?.focus();
     const onKey = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
@@ -42,15 +215,16 @@ export function Navbar() {
       }
     };
     window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
+    return () => {
+      document.body.style.overflow = "";
+      window.removeEventListener("keydown", onKey);
+    };
   }, [menuOpen]);
 
   const closeSearch = () => {
     setSearchOpen(false);
     searchButtonRef.current?.focus();
   };
-
-  const isActive = (to: string) => (to === "/" ? pathname === "/" : pathname.startsWith(to));
 
   return (
     <header className="sticky top-0 z-40 border-b border-border bg-background/90 backdrop-blur">
@@ -61,28 +235,6 @@ export function Navbar() {
           </span>
           <span className="rule-label mt-1 block text-[0.6rem]">{t.tagline}</span>
         </Link>
-
-        <nav aria-label={t.a11y.mainNav} className="hidden items-center gap-6 lg:flex">
-          <ul className="flex items-center gap-6">
-            {links.map((link) => (
-              <li key={link.to}>
-                <Link
-                  to={link.to}
-                  activeOptions={{ exact: link.to === "/" }}
-                  aria-current={isActive(link.to) ? "page" : undefined}
-                  activeProps={{ className: "text-foreground" }}
-                  inactiveProps={{ className: "text-muted-foreground" }}
-                  className={cn(
-                    "font-mono text-[0.72rem] uppercase tracking-[0.16em] transition-colors hover:text-accent",
-                    focusRing,
-                  )}
-                >
-                  {t.nav[link.key]}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </nav>
 
         <div className="flex items-center gap-2">
           <button
@@ -100,53 +252,25 @@ export function Navbar() {
             <Search aria-hidden="true" className="size-4" />
           </button>
           <LanguageSwitcher className="hidden sm:flex" />
+          <AuthButton className="hidden sm:flex" />
           <button
             ref={menuButtonRef}
             type="button"
             onClick={() => setMenuOpen((open) => !open)}
             aria-label={menuOpen ? t.nav.close : t.nav.openMenu}
             aria-expanded={menuOpen}
-            aria-controls="mobile-menu"
+            aria-controls="site-menu"
             className={cn(
-              "flex min-h-11 min-w-11 items-center justify-center border border-border transition-colors hover:bg-secondary lg:hidden",
+              "flex min-h-11 min-w-11 items-center justify-center border border-border text-foreground transition-colors hover:bg-secondary",
               focusRing,
             )}
           >
-            {menuOpen ? (
-              <X aria-hidden="true" className="size-4" />
-            ) : (
-              <Menu aria-hidden="true" className="size-4" />
-            )}
+            <HamburgerIcon open={menuOpen} />
           </button>
         </div>
       </div>
 
-      <div
-        id="mobile-menu"
-        ref={menuRef}
-        hidden={!menuOpen}
-        className={cn("border-t border-border bg-card lg:hidden", menuOpen ? "block" : "hidden")}
-      >
-        <nav aria-label={t.nav.menu} className="mx-auto w-full max-w-6xl px-5 py-4 sm:px-8">
-          <ul className="grid gap-1">
-            {links.map((link) => (
-              <li key={link.to}>
-                <Link
-                  to={link.to}
-                  activeOptions={{ exact: link.to === "/" }}
-                  aria-current={isActive(link.to) ? "page" : undefined}
-                  activeProps={{ className: "text-accent" }}
-                  onClick={() => setMenuOpen(false)}
-                  className={cn("block border-b border-border py-3 font-display text-2xl", focusRing)}
-                >
-                  {t.nav[link.key]}
-                </Link>
-              </li>
-            ))}
-          </ul>
-          <LanguageSwitcher className="mt-5 inline-flex sm:hidden" />
-        </nav>
-      </div>
+      <MenuOverlay open={menuOpen} onClose={() => setMenuOpen(false)} panelRef={panelRef} />
 
       <SearchPanel open={searchOpen} onClose={closeSearch} />
     </header>
