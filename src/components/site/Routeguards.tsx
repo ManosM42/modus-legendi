@@ -13,7 +13,7 @@ export function AdminRoute({ children }: { children: ReactNode }) {
   const { session, isAdmin, loading } = useAuth();
   if (loading) return <FullPageLoader />;
   if (!session) return <Link to="/login" replace />;
-  if (!isAdmin) return <Link to="/dashboard" replace />;
+  if (!isAdmin) return <Link to="/profile/$username" replace />;
   return <>{children}</>;
 }
 

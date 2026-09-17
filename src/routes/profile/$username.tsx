@@ -38,7 +38,7 @@ function ProfilePage() {
       .from("profiles")
       .select("*")
       .eq("username", username)
-      .single();
+      .maybeSingle();
 
     if (profileError || !profileData) {
       setNotFound(true);
@@ -51,11 +51,11 @@ function ProfilePage() {
     setBio(profileData.bio ?? "");
 
     const { data: blogData } = await supabase
-      .from("blogs")
+      .from("articles")
       .select("*")
       .eq("author_id", profileData.id)
       .eq("status", "published")
-      .order("created_at", { ascending: false });
+      .order("published_at", { ascending: false });
 
     setBlogs((blogData as Blog[]) ?? []);
     setLoading(false);
@@ -209,8 +209,8 @@ function ProfilePage() {
               {blogs.map((blog) => (
                 <Link
                   key={blog.id}
-                  to="/blog/$blogId"
-                  params={{ blogId: blog.id }}
+                  to="/article/$articleId"
+                  params={{ articleId: blog.id }}
                   className="rounded-xl border border-border bg-card p-4 block hover:shadow-md transition"
                 >
                   <h3 className="font-display font-semibold text-foreground">{blog.title}</h3>

@@ -17,8 +17,11 @@ import { Route as MagazineRouteImport } from './routes/magazine'
 import { Route as ReadingGroupRouteImport } from './routes/reading-group'
 import { Route as SearchRouteImport } from './routes/search'
 import { Route as SubmissionsRouteImport } from './routes/submissions'
+import { Route as AdminEditorsRouteImport } from './routes/admin/editors'
+import { Route as ArticleArticleIdRouteImport } from './routes/article/$articleId'
 import { Route as ArticlesIndexRouteImport } from './routes/articles.index'
 import { Route as ArticlesSlugRouteImport } from './routes/articles.$slug'
+import { Route as ColumnSlugRouteImport } from './routes/column/$slug'
 import { Route as ProfileUsernameRouteImport } from './routes/profile/$username'
 
 const IndexRoute = IndexRouteImport.update({
@@ -61,6 +64,16 @@ const SubmissionsRoute = SubmissionsRouteImport.update({
   path: '/submissions',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminEditorsRoute = AdminEditorsRouteImport.update({
+  id: '/admin/editors',
+  path: '/admin/editors',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ArticleArticleIdRoute = ArticleArticleIdRouteImport.update({
+  id: '/article/$articleId',
+  path: '/article/$articleId',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ArticlesIndexRoute = ArticlesIndexRouteImport.update({
   id: '/articles/',
   path: '/articles/',
@@ -69,6 +82,11 @@ const ArticlesIndexRoute = ArticlesIndexRouteImport.update({
 const ArticlesSlugRoute = ArticlesSlugRouteImport.update({
   id: '/articles/$slug',
   path: '/articles/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ColumnSlugRoute = ColumnSlugRouteImport.update({
+  id: '/column/$slug',
+  path: '/column/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ProfileUsernameRoute = ProfileUsernameRouteImport.update({
@@ -86,7 +104,10 @@ export interface FileRoutesByFullPath {
   '/reading-group': typeof ReadingGroupRoute
   '/search': typeof SearchRoute
   '/submissions': typeof SubmissionsRoute
+  '/admin/editors': typeof AdminEditorsRoute
+  '/article/$articleId': typeof ArticleArticleIdRoute
   '/articles/$slug': typeof ArticlesSlugRoute
+  '/column/$slug': typeof ColumnSlugRoute
   '/profile/$username': typeof ProfileUsernameRoute
   '/articles/': typeof ArticlesIndexRoute
 }
@@ -99,7 +120,10 @@ export interface FileRoutesByTo {
   '/reading-group': typeof ReadingGroupRoute
   '/search': typeof SearchRoute
   '/submissions': typeof SubmissionsRoute
+  '/admin/editors': typeof AdminEditorsRoute
+  '/article/$articleId': typeof ArticleArticleIdRoute
   '/articles/$slug': typeof ArticlesSlugRoute
+  '/column/$slug': typeof ColumnSlugRoute
   '/profile/$username': typeof ProfileUsernameRoute
   '/articles': typeof ArticlesIndexRoute
 }
@@ -113,7 +137,10 @@ export interface FileRoutesById {
   '/reading-group': typeof ReadingGroupRoute
   '/search': typeof SearchRoute
   '/submissions': typeof SubmissionsRoute
+  '/admin/editors': typeof AdminEditorsRoute
+  '/article/$articleId': typeof ArticleArticleIdRoute
   '/articles/$slug': typeof ArticlesSlugRoute
+  '/column/$slug': typeof ColumnSlugRoute
   '/profile/$username': typeof ProfileUsernameRoute
   '/articles/': typeof ArticlesIndexRoute
 }
@@ -128,7 +155,10 @@ export interface FileRouteTypes {
     | '/reading-group'
     | '/search'
     | '/submissions'
+    | '/admin/editors'
+    | '/article/$articleId'
     | '/articles/$slug'
+    | '/column/$slug'
     | '/profile/$username'
     | '/articles/'
   fileRoutesByTo: FileRoutesByTo
@@ -141,7 +171,10 @@ export interface FileRouteTypes {
     | '/reading-group'
     | '/search'
     | '/submissions'
+    | '/admin/editors'
+    | '/article/$articleId'
     | '/articles/$slug'
+    | '/column/$slug'
     | '/profile/$username'
     | '/articles'
   id:
@@ -154,7 +187,10 @@ export interface FileRouteTypes {
     | '/reading-group'
     | '/search'
     | '/submissions'
+    | '/admin/editors'
+    | '/article/$articleId'
     | '/articles/$slug'
+    | '/column/$slug'
     | '/profile/$username'
     | '/articles/'
   fileRoutesById: FileRoutesById
@@ -168,7 +204,10 @@ export interface RootRouteChildren {
   ReadingGroupRoute: typeof ReadingGroupRoute
   SearchRoute: typeof SearchRoute
   SubmissionsRoute: typeof SubmissionsRoute
+  AdminEditorsRoute: typeof AdminEditorsRoute
+  ArticleArticleIdRoute: typeof ArticleArticleIdRoute
   ArticlesSlugRoute: typeof ArticlesSlugRoute
+  ColumnSlugRoute: typeof ColumnSlugRoute
   ProfileUsernameRoute: typeof ProfileUsernameRoute
   ArticlesIndexRoute: typeof ArticlesIndexRoute
 }
@@ -231,6 +270,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SubmissionsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/editors': {
+      id: '/admin/editors'
+      path: '/admin/editors'
+      fullPath: '/admin/editors'
+      preLoaderRoute: typeof AdminEditorsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/article/$articleId': {
+      id: '/article/$articleId'
+      path: '/article/$articleId'
+      fullPath: '/article/$articleId'
+      preLoaderRoute: typeof ArticleArticleIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/articles/': {
       id: '/articles/'
       path: '/articles'
@@ -243,6 +296,13 @@ declare module '@tanstack/react-router' {
       path: '/articles/$slug'
       fullPath: '/articles/$slug'
       preLoaderRoute: typeof ArticlesSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/column/$slug': {
+      id: '/column/$slug'
+      path: '/column/$slug'
+      fullPath: '/column/$slug'
+      preLoaderRoute: typeof ColumnSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/profile/$username': {
@@ -264,7 +324,10 @@ const rootRouteChildren: RootRouteChildren = {
   ReadingGroupRoute: ReadingGroupRoute,
   SearchRoute: SearchRoute,
   SubmissionsRoute: SubmissionsRoute,
+  AdminEditorsRoute: AdminEditorsRoute,
+  ArticleArticleIdRoute: ArticleArticleIdRoute,
   ArticlesSlugRoute: ArticlesSlugRoute,
+  ColumnSlugRoute: ColumnSlugRoute,
   ProfileUsernameRoute: ProfileUsernameRoute,
   ArticlesIndexRoute: ArticlesIndexRoute,
 }

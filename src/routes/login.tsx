@@ -1,95 +1,68 @@
-import { useEffect, useState } from "react";
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { useState } from "react";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { ArrowLeft } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
-import { cn } from "@/lib/utils";
+import modusLogo from "@/assets/modus-logo.jpg";
 
 export const Route = createFileRoute("/login")({
+  head: () => ({
+    meta: [
+      { title: "Σύνδεση — MODUS LEGENDI" },
+      {
+        name: "description",
+        content: "Συνδέσου για να αποκτήσεις πρόσβαση στα κείμενα της λέσχης Modus Legendi.",
+      },
+    ],
+  }),
   component: LoginPage,
 });
 
-const focusRing =
-  "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring";
-
 function LoginPage() {
-  const { session, profile, signInWithGoogle } = useAuth();
-  const navigate = useNavigate();
+  const { signInWithGoogle } = useAuth();
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-  if (session && profile) {
-    navigate({ to: "/profile/$username", params: { username: profile.username }, replace: true });
-  }
-}, [session, profile, navigate]);
 
   const handleGoogleSignIn = async () => {
-    setError(null);
     setLoading(true);
     try {
       await signInWithGoogle();
-    } catch (err) {
-      setError("Something went wrong signing in. Please try again.");
+    } catch (error) {
+      console.error("Login error:", error);
       setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 bg-background">
-      <div className="w-full max-w-md">
-        <div className="rounded-2xl shadow-xl border border-border bg-card overflow-hidden">
-          {/* Header band */}
-          <div className="px-8 pt-10 pb-8 text-center bg-accent">
-            <h1 className="font-display text-3xl tracking-[0.08em] text-accent-foreground">
-              Modus Legendi
+    <div className="min-h-screen flex items-center justify-center bg-background px-5">
+      <div className="w-full max-w-md text-center">
+        <Link to="/" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors mb-12 group">
+          <ArrowLeft className="size-4 transition-transform group-hover:-translate-x-1" />
+          Επιστροφή στην αρχική
+        </Link>
+
+        <div className="space-y-8">
+          <div className="flex flex-col items-center">
+            <img src={modusLogo} alt="Modus Legendi" className="h-16 w-auto mb-6" />
+            <h1 className="font-display text-3xl text-foreground sm:text-4xl">
+              Καλώς ήρθες
             </h1>
-            <p className="mt-2 text-sm text-accent-foreground/80">
-              A reading room for reviews, essays &amp; the books that moved
-              you.
+            <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
+              Συνδέσου με τον λογαριασμό σου στο Google για να αποκτήσεις πρόσβαση στην ψηφιακή βιβλιοθήκη και τα τελευταία κείμενα της ομάδας μας.
             </p>
           </div>
 
-          {/* Body */}
-          <div className="px-8 py-10">
-            <h2 className="text-xl font-semibold text-center mb-1 text-foreground">
-              Sign in to continue
-            </h2>
-            <p className="text-sm text-center mb-8 text-muted-foreground">
-              Join the club. Write, review, and follow your favourite
-              readers.
-            </p>
+          <button
+            onClick={handleGoogleSignIn}
+            disabled={loading}
+            className="flex w-full items-center justify-center gap-3 rounded-xl border border-border bg-card px-4 py-4 font-medium text-foreground transition-all hover:bg-secondary disabled:opacity-60 shadow-sm"
+          >
+            <GoogleIcon />
+            {loading ? "Μεταφορά στο Google…" : "Συνέχεια με Google"}
+          </button>
 
-            {error && (
-              <div
-                role="alert"
-                className="mb-4 rounded-lg border border-destructive/30 bg-destructive/10 px-4 py-3 text-sm text-destructive"
-              >
-                {error}
-              </div>
-            )}
-
-            <button
-              onClick={handleGoogleSignIn}
-              disabled={loading}
-              className={cn(
-                "w-full flex items-center justify-center gap-3 rounded-xl border border-border px-4 py-3 font-medium text-foreground bg-background transition-colors hover:bg-secondary disabled:opacity-60 disabled:cursor-not-allowed",
-                focusRing,
-              )}
-            >
-              <GoogleIcon />
-              {loading ? "Redirecting to Google…" : "Continue with Google"}
-            </button>
-
-            <p className="mt-8 text-xs text-center leading-relaxed text-muted-foreground">
-              By continuing you agree to Modus Legendi's Terms and
-              acknowledge our Privacy Policy. Only Google sign-in is
-              supported — no separate passwords to manage.
-            </p>
-          </div>
+          <p className="text-xs text-center text-muted-foreground opacity-60">
+            Δεν έχεις πρόσβαση; Επικοινώνησε μαζί μας για να μάθεις περισσότερα για τη λέσχη.
+          </p>
         </div>
-
-        <p className="mt-6 text-center text-xs text-muted-foreground">
-          © {new Date().getFullYear()} Modus Legendi
-        </p>
       </div>
     </div>
   );
