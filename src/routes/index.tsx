@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, BookOpen, Feather, PenLine } from "lucide-react";
+import { ArrowRight, BookOpen, Feather, PenLine, SquarePen } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useI18n } from "@/i18n";
 import { supabase } from "@/supabase/client";
@@ -8,8 +8,10 @@ import { cn } from "@/lib/utils";
 import {
   sectionBlurbs,
   sectionOrder,
+  team,
 } from "@/data/content";
 import { Reveal } from "@/components/site/Reveal";
+import { TiltCard } from "@/components/site/TiltCard";
 import modusLogo from "@/assets/modus-logo.jpg";
 import type { ArticleWithRelations } from "@/lib/types";
 
@@ -25,6 +27,13 @@ export const Route = createFileRoute("/")({
   }),
   component: HomePage,
 });
+
+/** Strips whitespace/newlines and trims content to a short reading preview. */
+function excerpt(text: string, maxLength = 160): string {
+  const clean = text.replace(/\s+/g, " ").trim();
+  if (clean.length <= maxLength) return clean;
+  return clean.slice(0, maxLength).replace(/\s+\S*$/, "") + "…";
+}
 
 function HomePage() {
   const { session, loading } = useAuth();
@@ -55,6 +64,7 @@ function LoggedOutView({ locale, t }: { locale: string; t: any }) {
       <HeroSection locale={locale} t={t} />
       <ManifestoSection locale={locale} t={t} />
       <PillarsSection locale={locale} t={t} />
+      <FeaturedTeamSection locale={locale} t={t} />
       <FinalCTASection locale={locale} t={t} />
     </div>
   );
@@ -74,7 +84,7 @@ function HeroSection({ locale, t }: { locale: string; t: any }) {
       <div className="mx-auto grid w-full max-w-6xl gap-14 px-5 py-20 sm:px-8 sm:py-28 lg:grid-cols-[1.2fr_1fr] lg:items-center">
         <Reveal>
           <img src={modusLogo} alt="Modus Legendi" className="h-12 w-auto sm:h-14" />
-          <p className="mt-8 font-mono text-xs uppercase tracking-[0.2em] text-accent">
+          <p className="mt-8 font-mono text-xs uppercase tracking-[0.2em] text-accent font-bold">
             {t.home.heroKicker}
           </p>
           <h1 className="mt-4 text-balance font-display text-5xl leading-[1.05] text-foreground sm:text-6xl md:text-7xl">
@@ -101,23 +111,25 @@ function HeroSection({ locale, t }: { locale: string; t: any }) {
         </Reveal>
 
         <Reveal delay={120}>
-          <div className="relative aspect-[4/5] rounded-2xl border border-border bg-card p-10 shadow-2xl">
-            <div
-              aria-hidden
-              className="pointer-events-none absolute -inset-px rounded-2xl bg-gradient-to-br from-accent/20 via-transparent to-transparent"
-            />
-            <Feather aria-hidden className="size-8 text-accent" />
-            <blockquote className="mt-8 font-display text-2xl leading-snug text-foreground sm:text-3xl">
-              «Η ανάγνωση ως τρόπος να κατοικείς στον κόσμο.»
-            </blockquote>
-            <p className="mt-4 text-sm text-muted-foreground">Modus Legendi</p>
-            <div className="absolute bottom-10 left-10 right-10 border-t border-border pt-5">
-              <p className="font-mono text-[0.65rem] uppercase tracking-[0.18em] text-muted-foreground">
-                Philosophy
-              </p>
-              <p className="mt-1 text-sm text-foreground">Τρόπος ανάγνωσης, τρόπος ζωής.</p>
+          <TiltCard>
+            <div className="relative aspect-[4/5] rounded-2xl border border-border bg-card p-10 shadow-2xl">
+              <div
+                aria-hidden
+                className="pointer-events-none absolute -inset-px rounded-2xl bg-gradient-to-br from-accent/30 via-transparent to-transparent"
+              />
+              <Feather aria-hidden className="size-8 text-accent" />
+              <blockquote className="mt-8 font-display text-2xl leading-snug text-foreground sm:text-3xl italic">
+                «Η ανάγνωση ως τρόπος να κατοικείς στον κόσμο.»
+              </blockquote>
+              <p className="mt-4 text-sm text-muted-foreground font-mono">Modus Legendi</p>
+              <div className="absolute bottom-10 left-10 right-10 border-t border-border pt-5">
+                <p className="font-mono text-[0.65rem] uppercase tracking-[0.18em] text-accent font-bold">
+                  Philosophy
+                </p>
+                <p className="mt-1 text-sm text-foreground">Τρόπος ανάγνωσης, τρόπος ζωής.</p>
+              </div>
             </div>
-          </div>
+          </TiltCard>
         </Reveal>
       </div>
     </section>
@@ -126,13 +138,13 @@ function HeroSection({ locale, t }: { locale: string; t: any }) {
 
 function ManifestoSection({ locale, t }: { locale: string; t: any }) {
   return (
-    <section className="relative border-b border-border bg-foreground text-background">
+    <section className="relative border-b border-border bg-accent text-accent-foreground">
       <div className="mx-auto max-w-4xl px-5 py-24 text-center sm:px-8">
         <BookOpen aria-hidden className="mx-auto size-8 opacity-70" />
         <p className="mt-8 text-balance font-display text-3xl leading-relaxed sm:text-4xl">
           {t.home.manifestoText || "Ένα βιβλίο δεν διαβάζεται μόνο· διαβάζεται μαζί με άλλους, ξανά και ξανά, μέσα από τα μάτια όσων το αγάπησαν πριν από μας."}
         </p>
-        <p className="mt-6 text-sm uppercase tracking-[0.2em] opacity-60">
+        <p className="mt-6 text-sm uppercase tracking-[0.2em] opacity-60 font-mono">
           Το μανιφέστο μας
         </p>
       </div>
@@ -164,13 +176,53 @@ function PillarsSection({ locale, t }: { locale: string; t: any }) {
       <div className="grid gap-6 sm:grid-cols-3">
         {pillars.map(({ icon: Icon, title, text }, i) => (
           <Reveal key={title} delay={i * 100}>
-            <div className="group border border-border bg-card p-7 transition-all duration-300 hover:-translate-y-1 hover:border-accent hover:shadow-lg">
-              <Icon aria-hidden className="size-6 text-accent transition-transform duration-300 group-hover:scale-110" />
-              <h3 className="mt-5 font-display text-xl text-foreground">{title}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{text}</p>
-            </div>
+            <TiltCard>
+              <div className="group h-full border border-border bg-card p-7 transition-all duration-300 hover:border-accent hover:shadow-xl">
+                <Icon aria-hidden className="size-6 text-accent transition-transform duration-300 group-hover:scale-110" />
+                <h3 className="mt-5 font-display text-xl text-foreground">{title}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{text}</p>
+              </div>
+            </TiltCard>
           </Reveal>
         ))}
+      </div>
+    </section>
+  );
+}
+
+function FeaturedTeamSection({ locale, t }: { locale: string; t: any }) {
+  return (
+    <section className="mx-auto w-full max-w-6xl px-5 py-20 sm:px-8 sm:py-28">
+      <div className="grid gap-12 lg:grid-cols-[1fr_2fr] items-center">
+        <div>
+          <p className="rule-label text-accent font-bold">Η Ομάδα</p>
+          <h2 className="mt-4 text-3xl sm:text-4xl font-display">{t.about.teamTitle || "Η Συντακτική Ομάδα"}</h2>
+          <p className="mt-4 text-muted-foreground leading-relaxed">
+            Μια συλλογικότητα αναγνωστών, επιμελητών και μεταφραστών που πιστεύει στη φροντίδα του κειμένου.
+          </p>
+        </div>
+        <div className="grid gap-4 sm:grid-cols-2">
+          {team.map((member, i) => (
+            <Reveal key={member.name} delay={i * 100}>
+              <TiltCard>
+                <div className="group border border-border bg-card p-6 transition-all duration-300 hover:border-accent">
+                  <div className="flex items-center gap-4">
+                    <div className="flex size-12 items-center justify-center rounded-full bg-accent text-accent-foreground font-bold text-lg">
+                      {member.initials}
+                    </div>
+                    <div>
+                      <h4 className="font-display text-lg">{member.name}</h4>
+                      <p className="text-xs text-accent font-mono uppercase tracking-wider">{member.role[locale]}</p>
+                    </div>
+                  </div>
+                  <p className="mt-4 text-sm text-muted-foreground leading-relaxed">
+                    {member.bio[locale]}
+                  </p>
+                </div>
+              </TiltCard>
+            </Reveal>
+          ))}
+        </div>
       </div>
     </section>
   );
@@ -215,6 +267,8 @@ function LoggedInView({ locale, t }: { locale: string; t: any }) {
   const [articles, setArticles] = useState<ArticleWithRelations[]>([]);
   const [loading, setLoading] = useState(true);
 
+  const canWrite = profile?.role === "editor" || profile?.role === "admin";
+
   useEffect(() => {
     void loadFeed();
   }, []);
@@ -237,13 +291,26 @@ function LoggedInView({ locale, t }: { locale: string; t: any }) {
   return (
     <div className="min-h-screen bg-background">
       <div className="mx-auto max-w-6xl px-5 py-14 sm:px-8 sm:py-20">
-        <header className="mb-12">
-          <p className="font-mono text-xs uppercase tracking-[0.16em] text-muted-foreground">
-            {t.home.welcome || "Καλώς ήρθες"}{profile?.name ? `, ${profile.name}` : ""}
-          </p>
-          <h1 className="mt-2 font-display text-4xl text-foreground sm:text-5xl">
-            {t.home.latest || "Τα τελευταία κείμενα"}
-          </h1>
+        <header className="mb-12 flex flex-col gap-6 border-l-4 border-accent pl-6 sm:flex-row sm:items-end sm:justify-between sm:gap-4">
+          <div>
+            <p className="font-mono text-xs uppercase tracking-[0.16em] text-muted-foreground">
+              {t.home.welcome || "Καλώς ήρθες"}{profile?.name ? `, ${profile.name}` : ""}
+            </p>
+            <h1 className="mt-2 font-display text-4xl text-foreground sm:text-5xl">
+              {t.home.latest || "Τα τελευταία κείμενα"}
+            </h1>
+          </div>
+
+          {/* Prominent write CTA — only visible to editors/admins */}
+          {canWrite && (
+            <Link
+              to="/editor/new"
+              className="group inline-flex shrink-0 items-center gap-2.5 rounded-full bg-accent px-6 py-3.5 text-sm font-medium text-accent-foreground shadow-lg shadow-accent/20 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl hover:shadow-accent/30"
+            >
+              <SquarePen aria-hidden className="size-4 transition-transform duration-300 group-hover:rotate-6" />
+              Γράψε νέο άρθρο
+            </Link>
+          )}
         </header>
 
         {loading ? (
@@ -254,32 +321,48 @@ function LoggedInView({ locale, t }: { locale: string; t: any }) {
             <p className="text-sm text-muted-foreground">
               Δεν έχουν δημοσιευτεί κείμενα ακόμα — έλα ξανά σύντομα.
             </p>
+            {canWrite && (
+              <Link
+                to="/editor/new"
+                className="mt-6 inline-flex items-center gap-2 rounded-full bg-accent px-6 py-3 text-sm font-medium text-accent-foreground transition-transform hover:-translate-y-0.5"
+              >
+                <SquarePen aria-hidden className="size-4" />
+                Γράψε το πρώτο άρθρο
+              </Link>
+            )}
           </div>
         ) : (
           <div className="space-y-16">
             {/* Featured Article */}
             {first && (
               <Reveal>
-                <FeaturedArticleCard article={first} />
+                <TiltCard>
+                  <FeaturedArticleCard article={first} />
+                </TiltCard>
               </Reveal>
             )}
 
             {/* Editorial Sections / Columns */}
             <section className="border-y border-border py-12">
-              <h2 className="text-2xl font-display mb-8">{t.home.sections || "Θεματικές Στήλες"}</h2>
+              <h2 className="text-2xl font-display mb-8 flex items-center gap-3">
+                <span className="h-px w-8 bg-accent"></span>
+                {t.home.sections || "Θεματικές Στήλες"}
+              </h2>
               <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
                 {sectionOrder.map((section, index) => (
                   <Reveal key={section} delay={index * 50}>
-                    <Link
-                      to="/magazine"
-                      search={{ section }}
-                      className="block border border-border bg-card p-5 transition-colors hover:border-accent"
-                    >
-                      <h3 className="text-lg font-medium">{(t.sections as Record<string, string>)[section]}</h3>
-                      <p className="mt-1 text-xs leading-relaxed text-muted-foreground">
-                        {(sectionBlurbs[section as any] as any)[locale]}
-                      </p>
-                    </Link>
+                    <TiltCard>
+                      <Link
+                        to="/magazine"
+                        search={{ section }}
+                        className="block h-full border border-border bg-card p-5 transition-colors hover:border-accent"
+                      >
+                        <h3 className="text-lg font-medium">{(t.sections as Record<string, string>)[section]}</h3>
+                        <p className="mt-1 text-xs leading-relaxed text-muted-foreground">
+                          {(sectionBlurbs[section as any] as any)[locale]}
+                        </p>
+                      </Link>
+                    </TiltCard>
                   </Reveal>
                 ))}
               </div>
@@ -290,7 +373,9 @@ function LoggedInView({ locale, t }: { locale: string; t: any }) {
               <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                 {rest.map((article, i) => (
                   <Reveal key={article.id} delay={i * 60}>
-                    <ArticleFeedCard article={article} />
+                    <TiltCard>
+                      <ArticleFeedCard article={article} />
+                    </TiltCard>
                   </Reveal>
                 ))}
               </div>
@@ -327,7 +412,7 @@ function FeaturedArticleCard({ article }: { article: ArticleWithRelations }) {
         )}
       </div>
       <div className="flex flex-col justify-center p-7 sm:p-10">
-        <p className="font-mono text-xs uppercase tracking-[0.16em] text-accent">
+        <p className="font-mono text-xs uppercase tracking-[0.16em] text-accent font-bold">
           {article.column.name}
         </p>
         <h2 className="mt-3 font-display text-3xl leading-tight text-foreground group-hover:text-accent sm:text-4xl">
@@ -336,6 +421,9 @@ function FeaturedArticleCard({ article }: { article: ArticleWithRelations }) {
         {article.subtitle && (
           <p className="mt-3 text-sm text-muted-foreground">{article.subtitle}</p>
         )}
+        <p className="mt-4 text-sm leading-relaxed text-muted-foreground/90">
+          {excerpt(article.content, 220)}
+        </p>
         <AuthorRow article={article} className="mt-6" />
       </div>
     </Link>
@@ -363,12 +451,15 @@ function ArticleFeedCard({ article }: { article: ArticleWithRelations }) {
         )}
       </div>
       <div className="flex flex-1 flex-col p-5">
-        <p className="font-mono text-[0.65rem] uppercase tracking-[0.16em] text-accent">
+        <p className="font-mono text-[0.65rem] uppercase tracking-[0.16em] text-accent font-bold">
           {article.column.name}
         </p>
         <h3 className="mt-2 font-display text-xl leading-snug text-foreground group-hover:text-accent">
           {article.title}
         </h3>
+        <p className="mt-2 text-sm leading-relaxed text-muted-foreground/90">
+          {excerpt(article.content, 110)}
+        </p>
         <AuthorRow article={article} className="mt-auto pt-5" />
       </div>
     </Link>

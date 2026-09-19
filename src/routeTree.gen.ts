@@ -17,11 +17,15 @@ import { Route as MagazineRouteImport } from './routes/magazine'
 import { Route as ReadingGroupRouteImport } from './routes/reading-group'
 import { Route as SearchRouteImport } from './routes/search'
 import { Route as SubmissionsRouteImport } from './routes/submissions'
+import { Route as AdminIndexRouteImport } from './routes/admin/index'
 import { Route as AdminEditorsRouteImport } from './routes/admin/editors'
 import { Route as ArticleArticleIdRouteImport } from './routes/article/$articleId'
 import { Route as ArticlesIndexRouteImport } from './routes/articles.index'
 import { Route as ArticlesSlugRouteImport } from './routes/articles.$slug'
 import { Route as ColumnSlugRouteImport } from './routes/column/$slug'
+import { Route as EditorIndexRouteImport } from './routes/editor/index'
+import { Route as EditorArticleIdRouteImport } from './routes/editor/$articleId'
+import { Route as EditorNewRouteImport } from './routes/editor/new'
 import { Route as ProfileUsernameRouteImport } from './routes/profile/$username'
 
 const IndexRoute = IndexRouteImport.update({
@@ -64,6 +68,11 @@ const SubmissionsRoute = SubmissionsRouteImport.update({
   path: '/submissions',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminIndexRoute = AdminIndexRouteImport.update({
+  id: '/admin/',
+  path: '/admin/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminEditorsRoute = AdminEditorsRouteImport.update({
   id: '/admin/editors',
   path: '/admin/editors',
@@ -89,6 +98,21 @@ const ColumnSlugRoute = ColumnSlugRouteImport.update({
   path: '/column/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const EditorIndexRoute = EditorIndexRouteImport.update({
+  id: '/editor/',
+  path: '/editor/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EditorArticleIdRoute = EditorArticleIdRouteImport.update({
+  id: '/editor/$articleId',
+  path: '/editor/$articleId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EditorNewRoute = EditorNewRouteImport.update({
+  id: '/editor/new',
+  path: '/editor/new',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ProfileUsernameRoute = ProfileUsernameRouteImport.update({
   id: '/profile/$username',
   path: '/profile/$username',
@@ -108,8 +132,12 @@ export interface FileRoutesByFullPath {
   '/article/$articleId': typeof ArticleArticleIdRoute
   '/articles/$slug': typeof ArticlesSlugRoute
   '/column/$slug': typeof ColumnSlugRoute
+  '/editor/$articleId': typeof EditorArticleIdRoute
+  '/editor/new': typeof EditorNewRoute
   '/profile/$username': typeof ProfileUsernameRoute
+  '/admin/': typeof AdminIndexRoute
   '/articles/': typeof ArticlesIndexRoute
+  '/editor/': typeof EditorIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -124,8 +152,12 @@ export interface FileRoutesByTo {
   '/article/$articleId': typeof ArticleArticleIdRoute
   '/articles/$slug': typeof ArticlesSlugRoute
   '/column/$slug': typeof ColumnSlugRoute
+  '/editor/$articleId': typeof EditorArticleIdRoute
+  '/editor/new': typeof EditorNewRoute
   '/profile/$username': typeof ProfileUsernameRoute
+  '/admin': typeof AdminIndexRoute
   '/articles': typeof ArticlesIndexRoute
+  '/editor': typeof EditorIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -141,8 +173,12 @@ export interface FileRoutesById {
   '/article/$articleId': typeof ArticleArticleIdRoute
   '/articles/$slug': typeof ArticlesSlugRoute
   '/column/$slug': typeof ColumnSlugRoute
+  '/editor/$articleId': typeof EditorArticleIdRoute
+  '/editor/new': typeof EditorNewRoute
   '/profile/$username': typeof ProfileUsernameRoute
+  '/admin/': typeof AdminIndexRoute
   '/articles/': typeof ArticlesIndexRoute
+  '/editor/': typeof EditorIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -159,8 +195,12 @@ export interface FileRouteTypes {
     | '/article/$articleId'
     | '/articles/$slug'
     | '/column/$slug'
+    | '/editor/$articleId'
+    | '/editor/new'
     | '/profile/$username'
+    | '/admin/'
     | '/articles/'
+    | '/editor/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -175,8 +215,12 @@ export interface FileRouteTypes {
     | '/article/$articleId'
     | '/articles/$slug'
     | '/column/$slug'
+    | '/editor/$articleId'
+    | '/editor/new'
     | '/profile/$username'
+    | '/admin'
     | '/articles'
+    | '/editor'
   id:
     | '__root__'
     | '/'
@@ -191,8 +235,12 @@ export interface FileRouteTypes {
     | '/article/$articleId'
     | '/articles/$slug'
     | '/column/$slug'
+    | '/editor/$articleId'
+    | '/editor/new'
     | '/profile/$username'
+    | '/admin/'
     | '/articles/'
+    | '/editor/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -208,8 +256,12 @@ export interface RootRouteChildren {
   ArticleArticleIdRoute: typeof ArticleArticleIdRoute
   ArticlesSlugRoute: typeof ArticlesSlugRoute
   ColumnSlugRoute: typeof ColumnSlugRoute
+  EditorArticleIdRoute: typeof EditorArticleIdRoute
+  EditorNewRoute: typeof EditorNewRoute
   ProfileUsernameRoute: typeof ProfileUsernameRoute
+  AdminIndexRoute: typeof AdminIndexRoute
   ArticlesIndexRoute: typeof ArticlesIndexRoute
+  EditorIndexRoute: typeof EditorIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -270,6 +322,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SubmissionsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/': {
+      id: '/admin/'
+      path: '/admin'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AdminIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin/editors': {
       id: '/admin/editors'
       path: '/admin/editors'
@@ -305,6 +364,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ColumnSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/editor/': {
+      id: '/editor/'
+      path: '/editor'
+      fullPath: '/editor/'
+      preLoaderRoute: typeof EditorIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/editor/$articleId': {
+      id: '/editor/$articleId'
+      path: '/editor/$articleId'
+      fullPath: '/editor/$articleId'
+      preLoaderRoute: typeof EditorArticleIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/editor/new': {
+      id: '/editor/new'
+      path: '/editor/new'
+      fullPath: '/editor/new'
+      preLoaderRoute: typeof EditorNewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/profile/$username': {
       id: '/profile/$username'
       path: '/profile/$username'
@@ -328,8 +408,12 @@ const rootRouteChildren: RootRouteChildren = {
   ArticleArticleIdRoute: ArticleArticleIdRoute,
   ArticlesSlugRoute: ArticlesSlugRoute,
   ColumnSlugRoute: ColumnSlugRoute,
+  EditorArticleIdRoute: EditorArticleIdRoute,
+  EditorNewRoute: EditorNewRoute,
   ProfileUsernameRoute: ProfileUsernameRoute,
+  AdminIndexRoute: AdminIndexRoute,
   ArticlesIndexRoute: ArticlesIndexRoute,
+  EditorIndexRoute: EditorIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

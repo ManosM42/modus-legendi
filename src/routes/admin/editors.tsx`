@@ -51,22 +51,22 @@ function AdminEditorsPage() {
   };
 
   const handleToggleRole = async (profileId: string, currentRole: string) => {
-  const newRole = currentRole === "reader" ? "editor" : "reader";
-  setSaving(true);
-  setError(null);
+    const newRole = currentRole === "allowed_editors" ? "notallowed_editors" : "allowed_editors";
+    setSaving(true);
+    setError(null);
 
-  const { error } = await supabase
-    .from("profiles")
-    .update({ role: newRole })
-    .eq("id", profileId);
+    const { error } = await supabase
+      .from("profiles")
+      .update({ role: newRole })
+      .eq("id", profileId);
 
-  if (error) {
-    setError("Failed to update role. Please try again.");
-  } else {
-    await loadProfiles();
-  }
-  setSaving(false);
-};
+    if (error) {
+      setError("Failed to update role. Please try again.");
+    } else {
+      await loadProfiles();
+    }
+    setSaving(false);
+  };
 
   const handlePromoteToAdmin = async (profileId: string) => {
     if (!confirm("Are you sure you want to grant full Admin access?")) return;
@@ -98,8 +98,8 @@ function AdminEditorsPage() {
     );
   }
 
-const allowed = profiles.filter((p) => p.role === "editor" || p.role === "admin");
-const notAllowed = profiles.filter((p) => p.role === "reader");
+  const allowed = profiles.filter(p => p.role === "allowed_editors");
+  const notAllowed = profiles.filter(p => p.role === "notallowed_editors");
 
   return (
     <div className="min-h-screen bg-background px-4 py-16 sm:py-20">

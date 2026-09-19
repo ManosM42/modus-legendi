@@ -4,7 +4,7 @@ export interface Profile {
   name: string;
   bio: string;
   avatar_url: string | null;
-  role: "reader" | "editor" | "admin";
+  role: "notallowed_editors" | "allowed_editors" | "admin";
   created_at: string;
   updated_at: string;
 }
