@@ -18,11 +18,12 @@ import type { ArticleWithRelations } from "@/lib/types";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "MODUS LEGENDI — Λέσχη ανάγνωσης & περιοδικό λόγου" },
+      { title: "MODUS LEGENDI — Ένας χώρος για τη λογοτεχνία, την ανάγνωση και τη σκέψη." },
       {
         name: "description",
         content: "Λέσχη ανάγνωσης και ανεξάρτητο περιοδικό λόγου: δοκίμια, κριτικές, μεταφράσεις και συναντήσεις.",
       },
+
     ],
   }),
   component: HomePage,
@@ -59,9 +60,30 @@ function HomePage() {
    ========================================================= */
 
 function LoggedOutView({ locale, t }: { locale: string; t: any }) {
+  const [latestArticle, setLatestArticle] = useState<ArticleWithRelations | null>(null);
+  const [latestLoading, setLatestLoading] = useState(true);
+
+  useEffect(() => {
+    void loadLatest();
+  }, []);
+
+  const loadLatest = async () => {
+    setLatestLoading(true);
+    const { data } = await supabase
+      .from("articles")
+      .select("*, author:profiles(id, username, name, avatar_url), column:columns(id, slug, name)")
+      .eq("status", "published")
+      .order("published_at", { ascending: false })
+      .limit(1)
+      .maybeSingle();
+
+    setLatestArticle((data as unknown as ArticleWithRelations) ?? null);
+    setLatestLoading(false);
+  };
+
   return (
     <div className="overflow-hidden bg-background">
-      <HeroSection locale={locale} t={t} />
+      <HeroSection locale={locale} t={t} latestArticle={latestArticle} latestLoading={latestLoading} />
       <ManifestoSection locale={locale} t={t} />
       <PillarsSection locale={locale} t={t} />
       <FeaturedTeamSection locale={locale} t={t} />
@@ -70,7 +92,19 @@ function LoggedOutView({ locale, t }: { locale: string; t: any }) {
   );
 }
 
-function HeroSection({ locale, t }: { locale: string; t: any }) {
+function HeroSection({
+  locale,
+  t,
+  latestArticle,
+  latestLoading,
+}: {
+  locale: string;
+  t: any;
+  latestArticle: ArticleWithRelations | null;
+  latestLoading: boolean;
+}) {
+  const photo = latestArticle?.cover_url ?? latestArticle?.secondary_photo_url ?? null;
+
   return (
     <section className="relative border-b border-border paper-grain">
       <div
@@ -112,23 +146,75 @@ function HeroSection({ locale, t }: { locale: string; t: any }) {
 
         <Reveal delay={120}>
           <TiltCard>
-            <div className="relative aspect-[4/5] rounded-2xl border border-border bg-card p-10 shadow-2xl">
-              <div
-                aria-hidden
-                className="pointer-events-none absolute -inset-px rounded-2xl bg-gradient-to-br from-accent/30 via-transparent to-transparent"
-              />
-              <Feather aria-hidden className="size-8 text-accent" />
-              <blockquote className="mt-8 font-display text-2xl leading-snug text-foreground sm:text-3xl italic">
-                «Η ανάγνωση ως τρόπος να κατοικείς στον κόσμο.»
-              </blockquote>
-              <p className="mt-4 text-sm text-muted-foreground font-mono">Modus Legendi</p>
-              <div className="absolute bottom-10 left-10 right-10 border-t border-border pt-5">
-                <p className="font-mono text-[0.65rem] uppercase tracking-[0.18em] text-accent font-bold">
-                  Philosophy
-                </p>
-                <p className="mt-1 text-sm text-foreground">Τρόπος ανάγνωσης, τρόπος ζωής.</p>
+            {latestLoading ? (
+              <div className="relative aspect-[4/5] animate-pulse rounded-2xl border border-border bg-card" />
+            ) : latestArticle ? (
+              <Link
+                to="/article/$articleId"
+                params={{ articleId: latestArticle.id }}
+                className="group relative flex aspect-[4/5] flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-2xl"
+              >
+                {photo ? (
+                  <div className="relative h-2/5 w-full overflow-hidden">
+                    <img
+                      src={photo}
+                      alt=""
+                      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-card via-transparent to-transparent" />
+                  </div>
+                ) : (
+                  <div className="flex h-2/5 w-full items-center justify-center bg-secondary">
+                    <BookOpen aria-hidden className="size-10 text-muted-foreground/40" />
+                  </div>
+                )}
+
+                <div className="flex flex-1 flex-col p-8 sm:p-10">
+                  <p className="font-mono text-[0.65rem] uppercase tracking-[0.18em] text-accent font-bold">
+                    Τελευταίο κείμενο · {latestArticle.column.name}
+                  </p>
+                  <h2 className="mt-3 font-display text-2xl leading-snug text-foreground group-hover:text-accent sm:text-3xl">
+                    {latestArticle.title}
+                  </h2>
+                  <p className="mt-3 text-sm leading-relaxed text-muted-foreground line-clamp-3">
+                    {excerpt(latestArticle.content, 160)}
+                  </p>
+
+                  <div className="mt-auto flex items-center gap-2 border-t border-border pt-5">
+                    {latestArticle.author.avatar_url ? (
+                      <img
+                        src={latestArticle.author.avatar_url}
+                        alt={latestArticle.author.name}
+                        className="size-8 rounded-full object-cover border border-border"
+                      />
+                    ) : (
+                      <span className="flex size-8 items-center justify-center rounded-full bg-accent text-accent-foreground text-xs font-semibold">
+                        {latestArticle.author.name.charAt(0).toUpperCase()}
+                      </span>
+                    )}
+                    <span className="text-sm text-foreground">{latestArticle.author.name}</span>
+                  </div>
+                </div>
+              </Link>
+            ) : (
+              <div className="relative aspect-[4/5] rounded-2xl border border-border bg-card p-10 shadow-2xl">
+                <div
+                  aria-hidden
+                  className="pointer-events-none absolute -inset-px rounded-2xl bg-gradient-to-br from-accent/30 via-transparent to-transparent"
+                />
+                <Feather aria-hidden className="size-8 text-accent" />
+                <blockquote className="mt-8 font-display text-2xl leading-snug text-foreground sm:text-3xl italic">
+                  «Η ανάγνωση ως τρόπος να κατοικείς στον κόσμο.»
+                </blockquote>
+                <p className="mt-4 text-sm text-muted-foreground font-mono">Modus Legendi</p>
+                <div className="absolute bottom-10 left-10 right-10 border-t border-border pt-5">
+                  <p className="font-mono text-[0.65rem] uppercase tracking-[0.18em] text-accent font-bold">
+                    Philosophy
+                  </p>
+                  <p className="mt-1 text-sm text-foreground">Τρόπος ανάγνωσης, τρόπος ζωής.</p>
+                </div>
               </div>
-            </div>
+            )}
           </TiltCard>
         </Reveal>
       </div>

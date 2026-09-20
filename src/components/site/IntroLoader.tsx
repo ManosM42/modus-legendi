@@ -126,7 +126,7 @@ export function IntroLoader() {
             cx="110"
             cy="120"
             r="92"
-            stroke="#7A2131"
+            stroke="#2F4368"
             strokeWidth="1.2"
             strokeLinecap="round"
             pathLength={100}
@@ -184,7 +184,7 @@ export function IntroLoader() {
           content: "";
           position: absolute;
           inset: 0;
-          background: radial-gradient(circle at 50% 42%, rgba(122,33,49,0.06), transparent 60%);
+          background: radial-gradient(circle at 50% 42%, rgba(47,67,104,0.06), transparent 60%);
           pointer-events: none;
         }
 
@@ -202,9 +202,9 @@ export function IntroLoader() {
 
         .ml-intro__arc {
           position: absolute;
-          top: -18px;
-          width: 220px;
-          height: 220px;
+          top: -46px;
+          width: 280px;
+          height: 280px;
           opacity: 0.9;
         }
         .ml-intro__arc-path {
@@ -241,7 +241,7 @@ export function IntroLoader() {
           font-weight: 600;
           font-size: clamp(1.9rem, 6vw, 2.6rem);
           letter-spacing: 0.08em;
-          color: #7A2131;
+          color: #2F4368;
         }
         .ml-intro__word {
           opacity: 0;
@@ -258,7 +258,7 @@ export function IntroLoader() {
           display: inline-block;
           width: 0;
           height: 1px;
-          background: #7A2131;
+          background: #2F4368;
           opacity: 0.6;
           animation: ml-rule-draw 0.7s ease-out 3.15s forwards;
         }
@@ -286,14 +286,14 @@ export function IntroLoader() {
         .ml-intro__progress-track {
           width: 120px;
           height: 1px;
-          background: rgba(122, 33, 49, 0.18);
+          background: rgba(47, 67, 104, 0.18);
           display: block;
           position: relative;
         }
         .ml-intro__progress-fill {
           position: absolute;
           inset: 0;
-          background: #7A2131;
+          background: #2F4368;
           width: 0%;
           transition: width 0.1s linear;
         }
@@ -301,7 +301,7 @@ export function IntroLoader() {
           font-family: "IBM Plex Mono", monospace;
           font-size: 0.7rem;
           letter-spacing: 0.05em;
-          color: #7A2131;
+          color: #2F4368;
           min-width: 2.4em;
         }
 
@@ -362,7 +362,7 @@ export function IntroLoader() {
         @media (max-width: 420px) {
           .ml-intro__mark-crop { width: 140px; height: 124px; }
           .ml-intro__mark-img { width: 284px; }
-          .ml-intro__arc { width: 184px; height: 184px; top: -14px; }
+          .ml-intro__arc { width: 236px; height: 236px; top: -38px; }
         }
       `}</style>
     </div>

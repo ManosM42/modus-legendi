@@ -29,7 +29,7 @@ export default function AuthorLink({ author, size = "md" }: AuthorLinkProps) {
       ) : (
         <div
           className={`${dimension} rounded-full flex items-center justify-center font-semibold`}
-          style={{ backgroundColor: "#6B1E23", color: "#F5EDE0" }}
+          style={{ backgroundColor: "#2F4368", color: "#F5EDE0" }}
         >
           {author.name?.charAt(0).toUpperCase() || "?"}
         </div>

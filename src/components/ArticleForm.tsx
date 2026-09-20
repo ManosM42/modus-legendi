@@ -21,9 +21,12 @@ export function ArticleForm({ existingArticle, onSaved }: ArticleFormProps) {
   const [title, setTitle] = useState(existingArticle?.title ?? "");
   const [subtitle, setSubtitle] = useState(existingArticle?.subtitle ?? "");
   const [content, setContent] = useState(existingArticle?.content ?? "");
-  const [videoUrl, setVideoUrl] = useState(existingArticle?.video_url ?? "");
   const [coverUrl, setCoverUrl] = useState(existingArticle?.cover_url ?? "");
   const [coverUploading, setCoverUploading] = useState(false);
+  const [secondaryPhotoUrl, setSecondaryPhotoUrl] = useState(
+    existingArticle?.secondary_photo_url ?? "",
+  );
+  const [secondaryPhotoUploading, setSecondaryPhotoUploading] = useState(false);
 
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -57,9 +60,30 @@ export function ArticleForm({ existingArticle, onSaved }: ArticleFormProps) {
       const { data } = supabase.storage.from("article-covers").getPublicUrl(path);
       setCoverUrl(data.publicUrl);
     } else {
-      setError("Η ανέβασμα εικόνας απέτυχε. Δοκίμασε ξανά.");
+      setError("Το ανέβασμα εικόνας απέτυχε. Δοκίμασε ξανά.");
     }
     setCoverUploading(false);
+  };
+
+  const handleSecondaryPhotoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file || !user) return;
+
+    setSecondaryPhotoUploading(true);
+    const ext = file.name.split(".").pop();
+    const path = `${user.id}/${Date.now()}.${ext}`;
+
+    const { error: uploadError } = await supabase.storage
+      .from("article-photos")
+      .upload(path, file);
+
+    if (!uploadError) {
+      const { data } = supabase.storage.from("article-photos").getPublicUrl(path);
+      setSecondaryPhotoUrl(data.publicUrl);
+    } else {
+      setError("Το ανέβασμα φωτογραφίας απέτυχε. Δοκίμασε ξανά.");
+    }
+    setSecondaryPhotoUploading(false);
   };
 
   const save = async (status: "draft" | "published") => {
@@ -78,7 +102,7 @@ export function ArticleForm({ existingArticle, onSaved }: ArticleFormProps) {
       title: title.trim(),
       subtitle: subtitle.trim() || null,
       content,
-      video_url: videoUrl.trim() || null,
+      secondary_photo_url: secondaryPhotoUrl || null,
       cover_url: coverUrl || null,
       column_id: columnId,
       status,
@@ -187,20 +211,26 @@ export function ArticleForm({ existingArticle, onSaved }: ArticleFormProps) {
       </div>
 
       <div>
-        <label htmlFor="article-video" className="block text-sm font-medium text-foreground">
-          Video URL (προαιρετικό — YouTube ή Vimeo)
+        <label className="block text-sm font-medium text-foreground">
+          Επιπλέον φωτογραφία (προαιρετικό)
         </label>
+        {secondaryPhotoUrl && (
+          <img
+            src={secondaryPhotoUrl}
+            alt=""
+            className="mt-2 h-40 w-full rounded-md object-cover"
+          />
+        )}
         <input
-          id="article-video"
-          type="url"
-          value={videoUrl}
-          onChange={(e) => setVideoUrl(e.target.value)}
-          placeholder="https://youtube.com/watch?v=…"
-          className={cn(
-            "mt-1.5 w-full rounded-md border border-border bg-background px-3 py-2 text-sm text-foreground",
-            focusRing,
-          )}
+          type="file"
+          accept="image/*"
+          onChange={handleSecondaryPhotoUpload}
+          disabled={secondaryPhotoUploading}
+          className="mt-2 text-sm text-muted-foreground"
         />
+        {secondaryPhotoUploading && (
+          <p className="mt-1 text-xs text-muted-foreground">Ανέβασμα…</p>
+        )}
       </div>
 
       <div>

@@ -4,7 +4,7 @@ export interface Profile {
   name: string;
   bio: string;
   avatar_url: string | null;
-  role: "notallowed_editors" | "allowed_editors" | "admin";
+  role: "reader" | "editor" | "admin";
   created_at: string;
   updated_at: string;
 }
@@ -27,7 +27,8 @@ export interface Article {
   title: string;
   subtitle: string | null;
   cover_url: string | null;
-  video_url: string | null;
+  /** Uploaded photo (Supabase Storage URL) — replaces the old YouTube/Vimeo video_url feature. */
+  secondary_photo_url: string | null;
   content: string;
   status: "draft" | "published";
   published_at: string | null;

@@ -16,7 +16,7 @@ export const localeShort: Record<Locale, string> = {
 
 const el = {
   brand: "MODUS LEGENDI",
-  tagline: "Λέσχη ανάγνωσης & περιοδικό λόγου",
+  tagline: "Ένας χώρος για τη λογοτεχνία, την ανάγνωση και τη σκέψη",
   nav: {
     home: "Αρχική",
     articles: "Άρθρα",
@@ -247,7 +247,7 @@ type Dict = typeof el;
 
 const en: Dict = {
   brand: "MODUS LEGENDI",
-  tagline: "Reading group & literary magazine",
+  tagline: "A space for literature, reading and thinking",
   nav: {
     home: "Home",
     articles: "Articles",
@@ -378,7 +378,6 @@ const en: Dict = {
       subject: "Subject",
       link: "Link (optional)",
       file: "Textdatei",
-      file: "Manuscript file",
     },
     types: {
       essay: "Essay",
@@ -476,7 +475,7 @@ const en: Dict = {
 
 const de: Dict = {
   brand: "MODUS LEGENDI",
-  tagline: "Lesekreis & Literaturmagazin",
+  tagline: "Ein Raum für Literatur, Lesen und Denken",
   nav: {
     home: "Start",
     articles: "Artikel",
