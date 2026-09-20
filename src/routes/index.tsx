@@ -69,11 +69,16 @@ function LoggedOutView({ locale, t }: { locale: string; t: any }) {
 
   const loadLatest = async () => {
     setLatestLoading(true);
+    // nullsFirst: false + a created_at tiebreaker make this robust even
+    // if published_at is ever null for some row — the true newest article
+    // (by actual publish time, falling back to creation time) always wins.
+    // See sql/006_fix_published_at.sql for the underlying DB-level fix.
     const { data } = await supabase
       .from("articles")
       .select("*, author:profiles(id, username, name, avatar_url), column:columns(id, slug, name)")
       .eq("status", "published")
-      .order("published_at", { ascending: false })
+      .order("published_at", { ascending: false, nullsFirst: false })
+      .order("created_at", { ascending: false })
       .limit(1)
       .maybeSingle();
 
@@ -365,7 +370,8 @@ function LoggedInView({ locale, t }: { locale: string; t: any }) {
       .from("articles")
       .select("*, author:profiles(id, username, name, avatar_url), column:columns(id, slug, name)")
       .eq("status", "published")
-      .order("published_at", { ascending: false })
+      .order("published_at", { ascending: false, nullsFirst: false })
+      .order("created_at", { ascending: false })
       .limit(30);
 
     setArticles((data as unknown as ArticleWithRelations[]) ?? []);
