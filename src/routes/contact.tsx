@@ -54,9 +54,17 @@ function ContactPage() {
 
   if (status === "sent") {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-background px-4">
+      <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-background px-4">
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 -z-10"
+          style={{
+            background:
+              "radial-gradient(45% 55% at 50% 30%, hsl(var(--accent) / 0.14), transparent 65%)",
+          }}
+        />
         <TiltCard>
-          <div className="max-w-md text-center border border-border bg-card p-12 shadow-2xl rounded-2xl">
+          <div className="max-w-md rounded-2xl border border-border bg-card p-12 text-center shadow-2xl">
             <h1 className="font-display text-4xl text-foreground">Ευχαριστούμε!</h1>
             <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
               Λάβαμε το μήνυμά σου και θα επικοινωνήσουμε σύντομα.
@@ -77,7 +85,16 @@ function ContactPage() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="relative overflow-hidden bg-background">
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[420px] opacity-60"
+        style={{
+          background:
+            "radial-gradient(55% 60% at 85% 0%, hsl(var(--accent) / 0.14), transparent 65%), radial-gradient(45% 50% at 5% 15%, hsl(var(--accent) / 0.10), transparent 60%)",
+        }}
+      />
+
       <PageHeader
         kicker="Επικοινωνία"
         title="Μίλησέ μας"
@@ -86,8 +103,12 @@ function ContactPage() {
 
       <div className="mx-auto max-w-3xl px-5 py-16 sm:px-8 sm:py-24">
         <TiltCard>
-          <div className="border border-border bg-card p-8 shadow-2xl rounded-3xl sm:p-12">
-            <form onSubmit={handleSubmit} className="space-y-6">
+          <div className="relative overflow-hidden rounded-3xl border border-border bg-card p-8 shadow-2xl transition-shadow duration-300 hover:shadow-accent/10 sm:p-12">
+            <div
+              aria-hidden
+              className="pointer-events-none absolute -left-16 -top-16 size-48 rounded-full bg-accent/10 blur-3xl"
+            />
+            <form onSubmit={handleSubmit} className="relative space-y-6">
               <div className="grid gap-6 sm:grid-cols-2">
                 <div className="space-y-2">
                   <label htmlFor="name" className="block text-xs font-mono uppercase tracking-widest text-muted-foreground">
@@ -138,14 +159,14 @@ function ContactPage() {
                   )}
                 />
               </div>
-              <label className="flex items-start gap-3 text-sm text-foreground group cursor-pointer">
+              <label className="group flex cursor-pointer items-start gap-3 text-sm text-foreground">
                 <input
                   type="checkbox"
                   checked={wantsToSubmitText}
                   onChange={(e) => setWantsToSubmitText(e.target.checked)}
                   className="mt-0.5 size-4 rounded border-border accent-accent"
                 />
-                <span className="leading-relaxed group-hover:text-accent transition-colors">
+                <span className="leading-relaxed transition-colors group-hover:text-accent">
                   Θέλω να στείλω κείμενο προς δημοσίευση (δεν χρειάζεται να είμαι
                   μέλος της ομάδας)
                 </span>
@@ -159,7 +180,7 @@ function ContactPage() {
                 type="submit"
                 disabled={status === "sending"}
                 className={cn(
-                  "w-full rounded-lg bg-foreground px-4 py-4 text-sm font-bold uppercase tracking-widest text-background transition-all hover:-translate-y-0.5 disabled:opacity-60 shadow-lg",
+                  "w-full rounded-lg bg-foreground px-4 py-4 text-sm font-bold uppercase tracking-widest text-background shadow-lg transition-all hover:-translate-y-0.5 disabled:opacity-60",
                   focusRing,
                 )}
               >

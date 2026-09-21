@@ -51,6 +51,19 @@ export interface ContactSubmission {
   created_at: string;
 }
 
+/** A text submitted via the /submissions form (essay, review, translation, interview pitch). */
+export interface Submission {
+  id: string;
+  name: string;
+  email: string;
+  type: "essay" | "review" | "translation" | "interview";
+  title: string;
+  language: "el" | "en" | "de";
+  abstract: string;
+  status: "new" | "read" | "archived";
+  created_at: string;
+}
+
 export interface AdSlot {
   id: string;
   placement: "sidebar" | "footer";

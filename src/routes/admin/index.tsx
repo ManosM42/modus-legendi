@@ -4,7 +4,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/supabase/client";
 import { Reveal } from "@/components/site/Reveal";
 import { TiltCard } from "@/components/site/TiltCard";
-import { LayoutDashboard, Users, BookOpen, Eye, TrendingUp } from "lucide-react";
+import { LayoutDashboard, Users, BookOpen, Eye, TrendingUp, Mail } from "lucide-react";
 
 export const Route = createFileRoute("/admin/")({
   component: AdminDashboard,
@@ -69,7 +69,14 @@ function AdminDashboard() {
               Admin Dashboard
             </h1>
           </div>
-          <div className="flex gap-3">
+          <div className="flex flex-wrap gap-3">
+            <Link
+              to="/admin/inbox"
+              className="inline-flex items-center gap-2 rounded-lg border border-border bg-card px-4 py-2 text-xs font-mono uppercase tracking-wider text-muted-foreground transition-colors hover:text-foreground hover:border-foreground"
+            >
+              <Mail className="size-3" />
+              Inbox
+            </Link>
             <Link
               to="/admin/editors"
               className="inline-flex items-center gap-2 rounded-lg border border-border bg-card px-4 py-2 text-xs font-mono uppercase tracking-wider text-muted-foreground transition-colors hover:text-foreground hover:border-foreground"
@@ -143,7 +150,7 @@ function getIconForStat(name: string) {
   const normalized = name.toLowerCase();
   if (normalized.includes("μέλ") || normalized.includes("συντάκτ")) return <Users className="size-5" />;
   if (normalized.includes("άρθρ")) return <BookOpen className="size-5" />;
-  if (normalized.includes("μήνυμ")) return <Eye className="size-5" />;
+  if (normalized.includes("μήνυμ")) return <Mail className="size-5" />;
   if (normalized.includes("διαφήμ")) return <TrendingUp className="size-5" />;
   return <LayoutDashboard className="size-5" />;
 }

@@ -13,12 +13,13 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as LoginRouteImport } from './routes/login'
-import { Route as MagazineRouteImport } from './routes/magazine'
 import { Route as ReadingGroupRouteImport } from './routes/reading-group'
 import { Route as SearchRouteImport } from './routes/search'
 import { Route as SubmissionsRouteImport } from './routes/submissions'
+import { Route as WritingsRouteImport } from './routes/writings'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
 import { Route as AdminEditorsRouteImport } from './routes/admin/editors'
+import { Route as AdminInboxRouteImport } from './routes/admin/inbox'
 import { Route as ArticleArticleIdRouteImport } from './routes/article/$articleId'
 import { Route as ArticlesIndexRouteImport } from './routes/articles.index'
 import { Route as ArticlesSlugRouteImport } from './routes/articles.$slug'
@@ -48,11 +49,6 @@ const LoginRoute = LoginRouteImport.update({
   path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
-const MagazineRoute = MagazineRouteImport.update({
-  id: '/magazine',
-  path: '/magazine',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const ReadingGroupRoute = ReadingGroupRouteImport.update({
   id: '/reading-group',
   path: '/reading-group',
@@ -68,6 +64,11 @@ const SubmissionsRoute = SubmissionsRouteImport.update({
   path: '/submissions',
   getParentRoute: () => rootRouteImport,
 } as any)
+const WritingsRoute = WritingsRouteImport.update({
+  id: '/writings',
+  path: '/writings',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminIndexRoute = AdminIndexRouteImport.update({
   id: '/admin/',
   path: '/admin/',
@@ -76,6 +77,11 @@ const AdminIndexRoute = AdminIndexRouteImport.update({
 const AdminEditorsRoute = AdminEditorsRouteImport.update({
   id: '/admin/editors',
   path: '/admin/editors',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminInboxRoute = AdminInboxRouteImport.update({
+  id: '/admin/inbox',
+  path: '/admin/inbox',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ArticleArticleIdRoute = ArticleArticleIdRouteImport.update({
@@ -124,11 +130,12 @@ export interface FileRoutesByFullPath {
   '/about': typeof AboutRoute
   '/contact': typeof ContactRoute
   '/login': typeof LoginRoute
-  '/magazine': typeof MagazineRoute
   '/reading-group': typeof ReadingGroupRoute
   '/search': typeof SearchRoute
   '/submissions': typeof SubmissionsRoute
+  '/writings': typeof WritingsRoute
   '/admin/editors': typeof AdminEditorsRoute
+  '/admin/inbox': typeof AdminInboxRoute
   '/article/$articleId': typeof ArticleArticleIdRoute
   '/articles/$slug': typeof ArticlesSlugRoute
   '/column/$slug': typeof ColumnSlugRoute
@@ -144,11 +151,12 @@ export interface FileRoutesByTo {
   '/about': typeof AboutRoute
   '/contact': typeof ContactRoute
   '/login': typeof LoginRoute
-  '/magazine': typeof MagazineRoute
   '/reading-group': typeof ReadingGroupRoute
   '/search': typeof SearchRoute
   '/submissions': typeof SubmissionsRoute
+  '/writings': typeof WritingsRoute
   '/admin/editors': typeof AdminEditorsRoute
+  '/admin/inbox': typeof AdminInboxRoute
   '/article/$articleId': typeof ArticleArticleIdRoute
   '/articles/$slug': typeof ArticlesSlugRoute
   '/column/$slug': typeof ColumnSlugRoute
@@ -165,11 +173,12 @@ export interface FileRoutesById {
   '/about': typeof AboutRoute
   '/contact': typeof ContactRoute
   '/login': typeof LoginRoute
-  '/magazine': typeof MagazineRoute
   '/reading-group': typeof ReadingGroupRoute
   '/search': typeof SearchRoute
   '/submissions': typeof SubmissionsRoute
+  '/writings': typeof WritingsRoute
   '/admin/editors': typeof AdminEditorsRoute
+  '/admin/inbox': typeof AdminInboxRoute
   '/article/$articleId': typeof ArticleArticleIdRoute
   '/articles/$slug': typeof ArticlesSlugRoute
   '/column/$slug': typeof ColumnSlugRoute
@@ -187,11 +196,12 @@ export interface FileRouteTypes {
     | '/about'
     | '/contact'
     | '/login'
-    | '/magazine'
     | '/reading-group'
     | '/search'
     | '/submissions'
+    | '/writings'
     | '/admin/editors'
+    | '/admin/inbox'
     | '/article/$articleId'
     | '/articles/$slug'
     | '/column/$slug'
@@ -207,11 +217,12 @@ export interface FileRouteTypes {
     | '/about'
     | '/contact'
     | '/login'
-    | '/magazine'
     | '/reading-group'
     | '/search'
     | '/submissions'
+    | '/writings'
     | '/admin/editors'
+    | '/admin/inbox'
     | '/article/$articleId'
     | '/articles/$slug'
     | '/column/$slug'
@@ -227,11 +238,12 @@ export interface FileRouteTypes {
     | '/about'
     | '/contact'
     | '/login'
-    | '/magazine'
     | '/reading-group'
     | '/search'
     | '/submissions'
+    | '/writings'
     | '/admin/editors'
+    | '/admin/inbox'
     | '/article/$articleId'
     | '/articles/$slug'
     | '/column/$slug'
@@ -248,11 +260,12 @@ export interface RootRouteChildren {
   AboutRoute: typeof AboutRoute
   ContactRoute: typeof ContactRoute
   LoginRoute: typeof LoginRoute
-  MagazineRoute: typeof MagazineRoute
   ReadingGroupRoute: typeof ReadingGroupRoute
   SearchRoute: typeof SearchRoute
   SubmissionsRoute: typeof SubmissionsRoute
+  WritingsRoute: typeof WritingsRoute
   AdminEditorsRoute: typeof AdminEditorsRoute
+  AdminInboxRoute: typeof AdminInboxRoute
   ArticleArticleIdRoute: typeof ArticleArticleIdRoute
   ArticlesSlugRoute: typeof ArticlesSlugRoute
   ColumnSlugRoute: typeof ColumnSlugRoute
@@ -294,13 +307,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/magazine': {
-      id: '/magazine'
-      path: '/magazine'
-      fullPath: '/magazine'
-      preLoaderRoute: typeof MagazineRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/reading-group': {
       id: '/reading-group'
       path: '/reading-group'
@@ -322,6 +328,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SubmissionsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/writings': {
+      id: '/writings'
+      path: '/writings'
+      fullPath: '/writings'
+      preLoaderRoute: typeof WritingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin/': {
       id: '/admin/'
       path: '/admin'
@@ -334,6 +347,13 @@ declare module '@tanstack/react-router' {
       path: '/admin/editors'
       fullPath: '/admin/editors'
       preLoaderRoute: typeof AdminEditorsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/inbox': {
+      id: '/admin/inbox'
+      path: '/admin/inbox'
+      fullPath: '/admin/inbox'
+      preLoaderRoute: typeof AdminInboxRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/article/$articleId': {
@@ -400,11 +420,12 @@ const rootRouteChildren: RootRouteChildren = {
   AboutRoute: AboutRoute,
   ContactRoute: ContactRoute,
   LoginRoute: LoginRoute,
-  MagazineRoute: MagazineRoute,
   ReadingGroupRoute: ReadingGroupRoute,
   SearchRoute: SearchRoute,
   SubmissionsRoute: SubmissionsRoute,
+  WritingsRoute: WritingsRoute,
   AdminEditorsRoute: AdminEditorsRoute,
+  AdminInboxRoute: AdminInboxRoute,
   ArticleArticleIdRoute: ArticleArticleIdRoute,
   ArticlesSlugRoute: ArticlesSlugRoute,
   ColumnSlugRoute: ColumnSlugRoute,

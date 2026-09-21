@@ -445,7 +445,7 @@ function LoggedInView({ locale, t }: { locale: string; t: any }) {
                   <Reveal key={section} delay={index * 50}>
                     <TiltCard>
                       <Link
-                        to="/magazine"
+                        to="/writings"
                         search={{ section }}
                         className="block h-full border border-border bg-card p-5 transition-colors hover:border-accent"
                       >

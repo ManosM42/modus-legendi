@@ -18,21 +18,22 @@ const el = {
   brand: "MODUS LEGENDI",
   tagline: "Ένας χώρος για τη λογοτεχνία, την ανάγνωση και τη σκέψη",
   nav: {
-    home: "Αρχική",
-    articles: "Άρθρα",
-    columns: "Στήλες",
-    team: "Η Ομάδα",
-    interviews: "Συνεντεύξεις",
-    magazine: "Περιοδικό",
-    readingGroup: "Λέσχη ανάγνωσης",
-    about: "Ταυτότητα",
-    submissions: "Υποβολές",
-    contact: "Επικοινωνία",
-    menu: "Μενού",
-    close: "Κλείσιμο",
-    openMenu: "Άνοιγμα μενού",
-    language: "Γλώσσα",
-  },
+  home: "Αρχική",
+  articles: "Άρθρα",
+  columns: "Στήλες",
+  team: "Η Ομάδα",
+  interviews: "Συνεντεύξεις",
+  magazine: "Περιοδικό",
+  writings: "Κείμενα",        // ← ΝΕΟ
+  readingGroup: "Λέσχη ανάγνωσης",
+  about: "Ταυτότητα",
+  submissions: "Υποβολές",
+  contact: "Επικοινωνία",
+  menu: "Μενού",
+  close: "Κλείσιμο",
+  openMenu: "Άνοιγμα μενού",
+  language: "Γλώσσα",
+},
   actions: {
     readMore: "Διαβάστε περισσότερα",
     readArticle: "Ανάγνωση κειμένου",
@@ -50,7 +51,7 @@ const el = {
     loading: "Φόρτωση…",
   },
   home: {
-    heroKicker: "Τεύχος 07 — Χειμώνας",
+    heroKicker: "",
     heroTitle: "Η ανάγνωση ως τρόπος ζωής",
     heroText:
       "Μια κοινότητα αναγνωστών και ένα περιοδικό λόγου: δοκίμια, κριτικές, μεταφράσεις και συζητήσεις γύρω από το βιβλίο, με ρυθμό αργό και προσοχή στη λεπτομέρεια.",
@@ -93,6 +94,14 @@ const el = {
     relatedTitle: "Σχετικά κείμενα",
     shareTitle: "Κοινοποίηση",
     notFound: "Το κείμενο δεν βρέθηκε.",
+  },
+    writings: {
+    kicker: "Αρχείο κειμένων",
+    title: "Κείμενα",
+    intro:
+      "Όλα τα δοκίμια, οι κριτικές, οι μεταφράσεις και οι συνεντεύξεις της λέσχης, σε ένα ενιαίο αρχείο — χωρίς κατηγορίες, με τη σειρά που δημοσιεύτηκαν.",
+    featuredLabel: "Πιο πρόσφατο",
+    empty: "Δεν έχουν δημοσιευτεί κείμενα ακόμα.",
   },
   group: {
     title: "Λέσχη ανάγνωσης",
@@ -255,6 +264,7 @@ const en: Dict = {
     team: "The Team",
     interviews: "Interviews",
     magazine: "Magazine",
+    writings: "Writings",        // ← NEW
     readingGroup: "Reading group",
     about: "About",
     submissions: "Submissions",
@@ -281,7 +291,7 @@ const en: Dict = {
     loading: "Loading…",
   },
   home: {
-    heroKicker: "Issue 07 — Winter",
+    heroKicker: "",
     heroTitle: "Reading as a way of living",
     heroText:
       "A community of readers and a magazine of letters: essays, reviews, translations and conversations about books, at a slow pace and with care for detail.",
@@ -324,6 +334,14 @@ const en: Dict = {
     relatedTitle: "Related pieces",
     shareTitle: "Share",
     notFound: "This piece could not be found.",
+  },
+    writings: {
+    kicker: "Archive of writings",
+    title: "Writings",
+    intro:
+      "Every essay, review, translation and interview from the group, in one single archive — uncategorised, in the order they were published.",
+    featuredLabel: "Most recent",
+    empty: "No pieces have been published yet.",
   },
   group: {
     title: "Reading group",
@@ -483,6 +501,7 @@ const de: Dict = {
     team: "Das Team",
     interviews: "Interviews",
     magazine: "Magazin",
+    writings: "Texte",        // ← NEU
     readingGroup: "Lesekreis",
     about: "Über uns",
     submissions: "Einsendungen",
@@ -509,7 +528,7 @@ const de: Dict = {
     loading: "Lädt…",
   },
   home: {
-    heroKicker: "Ausgabe 07 — Winter",
+    heroKicker: "",
     heroTitle: "Lesen als Lebensform",
     heroText:
       "Eine Gemeinschaft von Lesenden und ein Magazin für Literatur: Essays, Kritiken, Übersetzungen und Gespräche über Bücher, langsam und mit Sinn für Details.",
@@ -552,6 +571,14 @@ const de: Dict = {
     relatedTitle: "Verwandte Beiträge",
     shareTitle: "Teilen",
     notFound: "Dieser Beitrag wurde nicht gefunden.",
+  },
+    writings: {
+    kicker: "Archiv der Texte",
+    title: "Texte",
+    intro:
+      "Jeder Essay, jede Kritik, jede Übersetzung und jedes Interview des Lesekreises, in einem einzigen Archiv — ohne Rubriken, in der Reihenfolge ihrer Veröffentlichung.",
+    featuredLabel: "Neueste",
+    empty: "Es wurden noch keine Beiträge veröffentlicht.",
   },
   group: {
     title: "Lesekreis",

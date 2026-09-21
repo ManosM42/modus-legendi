@@ -10,7 +10,7 @@ import { SearchPanel } from "./SearchPanel";
 
 const links = [
   { to: "/", key: "home" },
-  { to: "/magazine", key: "magazine" },
+  { to: "/writings", key: "writings" },
   { to: "/reading-group", key: "readingGroup" },
   { to: "/about", key: "about" },
   { to: "/submissions", key: "submissions" },

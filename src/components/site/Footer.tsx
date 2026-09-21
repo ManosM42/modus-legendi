@@ -3,7 +3,7 @@ import { useI18n } from "@/i18n";
 import { contactDetails } from "@/data/content";
 
 const explore = [
-  { to: "/magazine", key: "magazine" },
+  { to: "/writings", key: "writings" },
   { to: "/reading-group", key: "readingGroup" },
   { to: "/about", key: "about" },
   { to: "/submissions", key: "submissions" },
