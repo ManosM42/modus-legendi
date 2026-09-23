@@ -13,6 +13,7 @@ import {
 import { Reveal } from "@/components/site/Reveal";
 import { TiltCard } from "@/components/site/TiltCard";
 import modusLogo from "@/assets/modus-logo.jpg";
+import heroImage from "@/assets/hero.png";
 import type { ArticleWithRelations } from "@/lib/types";
 
 export const Route = createFileRoute("/")({
@@ -109,40 +110,73 @@ function HeroSection({
   latestLoading: boolean;
 }) {
   const photo = latestArticle?.cover_url ?? latestArticle?.secondary_photo_url ?? null;
+  const [parallaxY, setParallaxY] = useState(0);
+
+  useEffect(() => {
+    let frame = 0;
+
+    const handleScroll = () => {
+      if (frame) return;
+      frame = window.requestAnimationFrame(() => {
+        // Keep the movement subtle so the text/card remain stable and mobile stays smooth.
+        setParallaxY(Math.min(window.scrollY * 0.12, 90));
+        frame = 0;
+      });
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      if (frame) window.cancelAnimationFrame(frame);
+    };
+  }, []);
 
   return (
-    <section className="relative border-b border-border paper-grain">
+    <section className="relative isolate min-h-[760px] overflow-hidden border-b border-border paper-grain sm:min-h-[820px]">
+      {/* Landing-page-only hero background. The signed-in view is rendered by LoggedInView and never reaches this section. */}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 -z-10 opacity-60"
-        style={{
-          background:
-            "radial-gradient(60% 50% at 20% 10%, hsl(var(--accent) / 0.15), transparent 60%), radial-gradient(50% 40% at 90% 30%, hsl(var(--accent) / 0.10), transparent 60%)",
-        }}
-      />
-      <div className="mx-auto grid w-full max-w-6xl gap-14 px-5 py-20 sm:px-8 sm:py-28 lg:grid-cols-[1.2fr_1fr] lg:items-center">
+        className="pointer-events-none absolute inset-0 z-0 overflow-hidden"
+      >
+        <img
+          src={heroImage}
+          alt=""
+          className="absolute inset-0 h-[115%] w-full max-w-none object-cover object-[58%_center] will-change-transform sm:h-[112%] sm:object-[60%_center]"
+          style={{
+            transform: `translate3d(0, ${parallaxY}px, 0)`,
+          }}
+          onLoad={(event) => {
+            event.currentTarget.style.willChange = window.matchMedia("(prefers-reduced-motion: reduce)").matches
+              ? "auto"
+              : "transform";
+          }}
+        />
+      </div>
+
+      <div className="relative z-10 mx-auto grid w-full max-w-6xl gap-12 px-5 py-16 sm:gap-14 sm:px-8 sm:py-24 lg:min-h-[820px] lg:grid-cols-[1.15fr_0.85fr] lg:items-center lg:py-28">
         <Reveal>
           <img src={modusLogo} alt="Modus Legendi" className="h-12 w-auto sm:h-14" />
-          <p className="mt-8 font-mono text-xs uppercase tracking-[0.2em] text-accent font-bold">
+          <p className="mt-8 font-mono text-xs uppercase tracking-[0.2em] text-white font-bold drop-shadow-md">
             {t.home.heroKicker}
           </p>
-          <h1 className="mt-4 text-balance font-display text-5xl leading-[1.05] text-foreground sm:text-6xl md:text-7xl">
+          <h1 className="mt-4 max-w-3xl text-balance font-display text-5xl leading-[1.05] text-white drop-shadow-[0_3px_18px_rgba(0,0,0,0.55)] sm:text-6xl md:text-7xl">
             {t.home.heroTitle}
           </h1>
-          <p className="mt-6 max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg">
+          <p className="mt-6 max-w-xl text-base leading-relaxed text-white/90 drop-shadow-md sm:text-lg">
             {t.home.heroText}
           </p>
-          <div className="mt-10 flex flex-wrap gap-3">
+          <div className="mt-10 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
             <Link
               to="/login"
-              className="group inline-flex items-center gap-2 bg-foreground px-6 py-3.5 text-sm tracking-wide text-background transition-transform hover:-translate-y-0.5"
+              className="group inline-flex w-full items-center justify-center gap-2 bg-white px-6 py-3.5 sm:w-auto text-sm font-medium tracking-wide text-black shadow-xl transition-transform hover:-translate-y-0.5"
             >
               {t.actions.signIn || "Συνδέσου για να διαβάσεις"}
               <ArrowRight aria-hidden className="size-4 transition-transform group-hover:translate-x-1" />
             </Link>
             <Link
               to="/contact"
-              className="inline-flex items-center gap-2 border border-foreground px-6 py-3.5 text-sm tracking-wide text-foreground transition-colors hover:bg-secondary"
+              className="inline-flex w-full items-center justify-center gap-2 border border-white/80 bg-black/20 px-6 py-3.5 text-sm font-medium tracking-wide text-white backdrop-blur-sm transition-colors hover:bg-white/15"
             >
               {t.nav.contact || "Επικοινωνία"}
             </Link>
@@ -166,7 +200,7 @@ function HeroSection({
                       alt=""
                       className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-card via-transparent to-transparent" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-white/95 via-white/10 to-transparent dark:from-zinc-950/95 dark:via-zinc-950/10" />
                   </div>
                 ) : (
                   <div className="flex h-2/5 w-full items-center justify-center bg-secondary">
@@ -178,10 +212,10 @@ function HeroSection({
                   <p className="font-mono text-[0.65rem] uppercase tracking-[0.18em] text-accent font-bold">
                     Τελευταίο κείμενο · {latestArticle.column.name}
                   </p>
-                  <h2 className="mt-3 font-display text-2xl leading-snug text-foreground group-hover:text-accent sm:text-3xl">
+                  <h2 className="mt-3 font-display text-2xl leading-snug text-zinc-950 group-hover:text-accent dark:text-white sm:text-3xl">
                     {latestArticle.title}
                   </h2>
-                  <p className="mt-3 text-sm leading-relaxed text-muted-foreground line-clamp-3">
+                  <p className="mt-3 line-clamp-3 text-sm leading-relaxed text-zinc-700 dark:text-zinc-300">
                     {excerpt(latestArticle.content, 160)}
                   </p>
 
@@ -197,26 +231,26 @@ function HeroSection({
                         {latestArticle.author.name.charAt(0).toUpperCase()}
                       </span>
                     )}
-                    <span className="text-sm text-foreground">{latestArticle.author.name}</span>
+                    <span className="text-sm font-medium text-zinc-950 dark:text-white">{latestArticle.author.name}</span>
                   </div>
                 </div>
               </Link>
             ) : (
-              <div className="relative aspect-[4/5] rounded-2xl border border-border bg-card p-10 shadow-2xl">
+              <div className="relative aspect-[4/5] rounded-2xl border border-white/20 bg-white/95 p-10 text-black shadow-2xl backdrop-blur-sm dark:bg-zinc-950/95 dark:text-white">
                 <div
                   aria-hidden
                   className="pointer-events-none absolute -inset-px rounded-2xl bg-gradient-to-br from-accent/30 via-transparent to-transparent"
                 />
                 <Feather aria-hidden className="size-8 text-accent" />
-                <blockquote className="mt-8 font-display text-2xl leading-snug text-foreground sm:text-3xl italic">
+                <blockquote className="mt-8 font-display text-2xl leading-snug text-zinc-950 dark:text-white sm:text-3xl italic">
                   «Η ανάγνωση ως τρόπος να κατοικείς στον κόσμο.»
                 </blockquote>
-                <p className="mt-4 text-sm text-muted-foreground font-mono">Modus Legendi</p>
+                <p className="mt-4 font-mono text-sm text-zinc-600 dark:text-zinc-300">Modus Legendi</p>
                 <div className="absolute bottom-10 left-10 right-10 border-t border-border pt-5">
                   <p className="font-mono text-[0.65rem] uppercase tracking-[0.18em] text-accent font-bold">
                     Philosophy
                   </p>
-                  <p className="mt-1 text-sm text-foreground">Τρόπος ανάγνωσης, τρόπος ζωής.</p>
+                  <p className="mt-1 text-sm text-zinc-950 dark:text-white">Τρόπος ανάγνωσης, τρόπος ζωής.</p>
                 </div>
               </div>
             )}
@@ -335,8 +369,7 @@ function FinalCTASection({ locale, t }: { locale: string; t: any }) {
           {t.home.joinClub || "Μπες στη λέσχη."}
         </h2>
         <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
-          Συνδέσου για να βλέπεις όλα τα κείμενα της ομάδας μας σε ένα ζωντανό
-          feed, μόλις δημοσιεύονται.
+          Συνδέσου στην λέσχη για να ανημερώνεσαι για νέες αλλαγές, να διαβάζεις τα κείμενα και να συμμετέχεις παραγωγή κειμένων. 
         </p>
         <Link
           to="/login"
