@@ -8,6 +8,7 @@ const explore = [
   { to: "/about", key: "about" },
   { to: "/submissions", key: "submissions" },
   { to: "/contact", key: "contact" },
+  { to: "/terms", key: "terms" },
 ] as const;
 
 export function Footer() {

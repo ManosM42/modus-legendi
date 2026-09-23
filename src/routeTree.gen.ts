@@ -16,6 +16,7 @@ import { Route as LoginRouteImport } from './routes/login'
 import { Route as ReadingGroupRouteImport } from './routes/reading-group'
 import { Route as SearchRouteImport } from './routes/search'
 import { Route as SubmissionsRouteImport } from './routes/submissions'
+import { Route as TermsRouteImport } from './routes/terms'
 import { Route as WritingsRouteImport } from './routes/writings'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
 import { Route as AdminEditorsRouteImport } from './routes/admin/editors'
@@ -62,6 +63,11 @@ const SearchRoute = SearchRouteImport.update({
 const SubmissionsRoute = SubmissionsRouteImport.update({
   id: '/submissions',
   path: '/submissions',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TermsRoute = TermsRouteImport.update({
+  id: '/terms',
+  path: '/terms',
   getParentRoute: () => rootRouteImport,
 } as any)
 const WritingsRoute = WritingsRouteImport.update({
@@ -133,6 +139,7 @@ export interface FileRoutesByFullPath {
   '/reading-group': typeof ReadingGroupRoute
   '/search': typeof SearchRoute
   '/submissions': typeof SubmissionsRoute
+  '/terms': typeof TermsRoute
   '/writings': typeof WritingsRoute
   '/admin/editors': typeof AdminEditorsRoute
   '/admin/inbox': typeof AdminInboxRoute
@@ -154,6 +161,7 @@ export interface FileRoutesByTo {
   '/reading-group': typeof ReadingGroupRoute
   '/search': typeof SearchRoute
   '/submissions': typeof SubmissionsRoute
+  '/terms': typeof TermsRoute
   '/writings': typeof WritingsRoute
   '/admin/editors': typeof AdminEditorsRoute
   '/admin/inbox': typeof AdminInboxRoute
@@ -176,6 +184,7 @@ export interface FileRoutesById {
   '/reading-group': typeof ReadingGroupRoute
   '/search': typeof SearchRoute
   '/submissions': typeof SubmissionsRoute
+  '/terms': typeof TermsRoute
   '/writings': typeof WritingsRoute
   '/admin/editors': typeof AdminEditorsRoute
   '/admin/inbox': typeof AdminInboxRoute
@@ -199,6 +208,7 @@ export interface FileRouteTypes {
     | '/reading-group'
     | '/search'
     | '/submissions'
+    | '/terms'
     | '/writings'
     | '/admin/editors'
     | '/admin/inbox'
@@ -220,6 +230,7 @@ export interface FileRouteTypes {
     | '/reading-group'
     | '/search'
     | '/submissions'
+    | '/terms'
     | '/writings'
     | '/admin/editors'
     | '/admin/inbox'
@@ -241,6 +252,7 @@ export interface FileRouteTypes {
     | '/reading-group'
     | '/search'
     | '/submissions'
+    | '/terms'
     | '/writings'
     | '/admin/editors'
     | '/admin/inbox'
@@ -263,6 +275,7 @@ export interface RootRouteChildren {
   ReadingGroupRoute: typeof ReadingGroupRoute
   SearchRoute: typeof SearchRoute
   SubmissionsRoute: typeof SubmissionsRoute
+  TermsRoute: typeof TermsRoute
   WritingsRoute: typeof WritingsRoute
   AdminEditorsRoute: typeof AdminEditorsRoute
   AdminInboxRoute: typeof AdminInboxRoute
@@ -326,6 +339,13 @@ declare module '@tanstack/react-router' {
       path: '/submissions'
       fullPath: '/submissions'
       preLoaderRoute: typeof SubmissionsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/terms': {
+      id: '/terms'
+      path: '/terms'
+      fullPath: '/terms'
+      preLoaderRoute: typeof TermsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/writings': {
@@ -423,6 +443,7 @@ const rootRouteChildren: RootRouteChildren = {
   ReadingGroupRoute: ReadingGroupRoute,
   SearchRoute: SearchRoute,
   SubmissionsRoute: SubmissionsRoute,
+  TermsRoute: TermsRoute,
   WritingsRoute: WritingsRoute,
   AdminEditorsRoute: AdminEditorsRoute,
   AdminInboxRoute: AdminInboxRoute,

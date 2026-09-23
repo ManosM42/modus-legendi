@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { BookOpen, Feather } from "lucide-react";
 import { useI18n } from "@/i18n";
@@ -8,7 +8,45 @@ import { Reveal } from "@/components/site/Reveal";
 import { TiltCard } from "@/components/site/TiltCard";
 import type { ArticleWithRelations } from "@/lib/types";
 
+type SectionKey = "essays" | "reviews" | "translations" | "interviews";
+
+// URL / translation key -> real column slug in the `columns` table
+const SECTION_TO_SLUG: Record<SectionKey, string> = {
+  essays: "dokimio",
+  reviews: "kritiki",
+  translations: "metafrasi",
+  interviews: "sinentefxi",
+};
+
+const SECTION_ORDER: SectionKey[] = ["essays", "reviews", "translations", "interviews"];
+
+const SECTION_STYLES: Record<SectionKey, { chip: string; chipActive: string; dot: string }> = {
+  essays: {
+    chip: "border-amber-500/30 text-amber-700 hover:bg-amber-500/10 dark:text-amber-400",
+    chipActive: "border-amber-500 bg-amber-500/15 text-amber-700 dark:text-amber-300",
+    dot: "bg-amber-500",
+  },
+  reviews: {
+    chip: "border-sky-500/30 text-sky-700 hover:bg-sky-500/10 dark:text-sky-400",
+    chipActive: "border-sky-500 bg-sky-500/15 text-sky-700 dark:text-sky-300",
+    dot: "bg-sky-500",
+  },
+  translations: {
+    chip: "border-emerald-500/30 text-emerald-700 hover:bg-emerald-500/10 dark:text-emerald-400",
+    chipActive: "border-emerald-500 bg-emerald-500/15 text-emerald-700 dark:text-emerald-300",
+    dot: "bg-emerald-500",
+  },
+  interviews: {
+    chip: "border-rose-500/30 text-rose-700 hover:bg-rose-500/10 dark:text-rose-400",
+    chipActive: "border-rose-500 bg-rose-500/15 text-rose-700 dark:text-rose-300",
+    dot: "bg-rose-500",
+  },
+};
+
 export const Route = createFileRoute("/writings")({
+  validateSearch: (search: Record<string, unknown>) => ({
+    section: typeof search["section"] === "string" ? (search["section"] as SectionKey) : undefined,
+  }),
   head: () => ({
     meta: [
       { title: "Κείμενα — MODUS LEGENDI" },
@@ -41,6 +79,8 @@ function formatDate(iso: string | null, locale: string): string {
 
 function WritingsPage() {
   const { locale, t } = useI18n();
+  const { section } = Route.useSearch();
+  const navigate = Route.useNavigate();
   const [articles, setArticles] = useState<ArticleWithRelations[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -61,11 +101,18 @@ function WritingsPage() {
     setLoading(false);
   };
 
-  const [featured, ...rest] = articles;
+  const filtered = useMemo(() => {
+    if (!section) return articles;
+    const dbSlug = SECTION_TO_SLUG[section as SectionKey];
+    if (!dbSlug) return articles;
+    return articles.filter((article) => article.column?.slug === dbSlug);
+  }, [articles, section]);
+
+  const [featured, ...rest] = filtered;
+  const activeStyle = section ? SECTION_STYLES[section as SectionKey] : undefined;
 
   return (
     <div className="relative overflow-hidden bg-background">
-      {/* Ambient accent glow, consistent with the rest of the site */}
       <div
         aria-hidden
         className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[460px] opacity-60"
@@ -75,7 +122,6 @@ function WritingsPage() {
         }}
       />
 
-      {/* Header */}
       <header className="border-b border-border paper-grain">
         <div className="mx-auto max-w-6xl px-5 py-16 sm:px-8 sm:py-24">
           <Reveal>
@@ -84,11 +130,47 @@ function WritingsPage() {
               {t.writings.kicker}
             </p>
             <h1 className="mt-4 text-balance font-display text-5xl leading-[1.05] text-foreground sm:text-6xl md:text-7xl">
-              {t.writings.title}
+              {section ? t.sections[section as SectionKey] : t.writings.title}
             </h1>
             <p className="mt-6 max-w-2xl text-base leading-relaxed text-muted-foreground sm:text-lg">
               {t.writings.intro}
             </p>
+          </Reveal>
+
+          {/* Section filter chips */}
+          <Reveal delay={80}>
+            <div className="mt-8 flex flex-wrap items-center gap-2">
+              <Link
+                to="/writings"
+                search={{ section: undefined }}
+                className={cn(
+                  "rounded-full border px-4 py-1.5 font-mono text-xs uppercase tracking-[0.12em] transition-colors",
+                  !section
+                    ? "border-foreground bg-foreground text-background"
+                    : "border-border text-muted-foreground hover:border-foreground hover:text-foreground",
+                )}
+              >
+                {t.magazine.filterAll}
+              </Link>
+              {SECTION_ORDER.map((key) => {
+                const style = SECTION_STYLES[key];
+                const isActive = section === key;
+                return (
+                  <Link
+                    key={key}
+                    to="/writings"
+                    search={{ section: key }}
+                    className={cn(
+                      "flex items-center gap-1.5 rounded-full border px-4 py-1.5 font-mono text-xs uppercase tracking-[0.12em] transition-colors",
+                      isActive ? style.chipActive : style.chip,
+                    )}
+                  >
+                    <span aria-hidden className={cn("size-1.5 rounded-full", style.dot)} />
+                    {t.sections[key]}
+                  </Link>
+                );
+              })}
+            </div>
           </Reveal>
         </div>
       </header>
@@ -96,23 +178,35 @@ function WritingsPage() {
       <div className="mx-auto max-w-6xl px-5 py-16 sm:px-8 sm:py-20">
         {loading ? (
           <WritingsSkeleton />
-        ) : articles.length === 0 ? (
+        ) : filtered.length === 0 ? (
           <div className="py-24 text-center">
             <BookOpen aria-hidden className="mx-auto mb-4 size-12 text-muted-foreground/40" />
             <p className="text-sm text-muted-foreground">{t.writings.empty}</p>
+            {section && (
+              <button
+                type="button"
+                onClick={() => navigate({ search: { section: undefined } })}
+                className="mt-4 text-xs font-mono uppercase tracking-[0.12em] text-accent underline-offset-4 hover:underline"
+              >
+                {t.actions.clear}
+              </button>
+            )}
           </div>
         ) : (
           <div className="space-y-14">
-            {/* Featured — the newest piece, given more room */}
             {featured && (
               <Reveal>
                 <TiltCard>
-                  <FeaturedWriting article={featured} locale={locale} label={t.writings.featuredLabel} />
+                  <FeaturedWriting
+                    article={featured}
+                    locale={locale}
+                    label={t.writings.featuredLabel}
+                    accent={activeStyle?.dot}
+                  />
                 </TiltCard>
               </Reveal>
             )}
 
-            {/* Everything else — one continuous, uncategorised gallery */}
             {rest.length > 0 && (
               <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                 {rest.map((article, i) => (
@@ -135,10 +229,12 @@ function FeaturedWriting({
   article,
   locale,
   label,
+  accent,
 }: {
   article: ArticleWithRelations;
   locale: string;
   label: string;
+  accent?: string;
 }) {
   const photo = article.cover_url ?? article.secondary_photo_url ?? null;
 
@@ -167,11 +263,12 @@ function FeaturedWriting({
       </div>
 
       <div className="flex flex-col justify-center p-8 sm:p-12">
-        <span className="w-fit rounded-full border border-accent/40 bg-accent/10 px-3 py-1 font-mono text-[0.65rem] uppercase tracking-[0.16em] text-accent">
+        <span className="flex w-fit items-center gap-1.5 rounded-full border border-accent/40 bg-accent/10 px-3 py-1 font-mono text-[0.65rem] uppercase tracking-[0.16em] text-accent">
+          {accent && <span aria-hidden className={cn("size-1.5 rounded-full", accent)} />}
           {label}
         </span>
         <p className="mt-4 font-mono text-[0.65rem] uppercase tracking-[0.16em] text-muted-foreground">
-          {article.column.name} · {formatDate(article.published_at, locale)}
+          {article.column?.name ?? "—"} · {formatDate(article.published_at, locale)}
         </p>
         <h2 className="mt-3 font-display text-3xl leading-tight text-foreground transition-colors group-hover:text-accent sm:text-4xl">
           {article.title}
@@ -227,7 +324,7 @@ function WritingCard({ article, locale }: { article: ArticleWithRelations; local
 
       <div className="flex flex-1 flex-col p-5">
         <p className="font-mono text-[0.65rem] uppercase tracking-[0.16em] text-accent">
-          {article.column.name} · {formatDate(article.published_at, locale)}
+          {article.column?.name ?? "—"} · {formatDate(article.published_at, locale)}
         </p>
         <h3 className="mt-2 font-display text-xl leading-snug text-foreground transition-colors group-hover:text-accent">
           {article.title}

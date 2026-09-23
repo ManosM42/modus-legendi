@@ -18,22 +18,22 @@ const el = {
   brand: "MODUS LEGENDI",
   tagline: "Ένας χώρος για τη λογοτεχνία, την ανάγνωση και τη σκέψη",
   nav: {
-  home: "Αρχική",
-  articles: "Άρθρα",
-  columns: "Στήλες",
-  team: "Η Ομάδα",
-  interviews: "Συνεντεύξεις",
-  magazine: "Περιοδικό",
-  writings: "Κείμενα",        // ← ΝΕΟ
-  readingGroup: "Λέσχη ανάγνωσης",
-  about: "Ταυτότητα",
-  submissions: "Υποβολές",
-  contact: "Επικοινωνία",
-  menu: "Μενού",
-  close: "Κλείσιμο",
-  openMenu: "Άνοιγμα μενού",
-  language: "Γλώσσα",
-},
+    home: "Αρχική",
+    articles: "Άρθρα",
+    columns: "Στήλες",
+    team: "Η Ομάδα",
+    interviews: "Συνεντεύξεις",
+    magazine: "Περιοδικό",
+    writings: "Κείμενα",
+    readingGroup: "Λέσχη ανάγνωσης",
+    about: "Ταυτότητα",
+    submissions: "Υποβολές",
+    contact: "Επικοινωνία",
+    menu: "Μενού",
+    close: "Κλείσιμο",
+    openMenu: "Άνοιγμα μενού",
+    language: "Γλώσσα",
+  },
   actions: {
     readMore: "Διαβάστε περισσότερα",
     readArticle: "Ανάγνωση κειμένου",
@@ -95,7 +95,7 @@ const el = {
     shareTitle: "Κοινοποίηση",
     notFound: "Το κείμενο δεν βρέθηκε.",
   },
-    writings: {
+  writings: {
     kicker: "Αρχείο κειμένων",
     title: "Κείμενα",
     intro:
@@ -250,6 +250,105 @@ const el = {
     translations: "Μεταφράσεις",
     interviews: "Συνεντεύξεις",
   },
+  terms: {
+    kicker: "Νομικά",
+    title: "Όροι Χρήσης",
+    intro:
+      "Η χρήση του ιστότοπου MODUS LEGENDI προϋποθέτει την αποδοχή των παρακάτω όρων. Παρακαλούμε διάβασέ τους προσεκτικά πριν συνδεθείς ή χρησιμοποιήσεις τον ιστότοπο.",
+    lastUpdated: "Τελευταία ενημέρωση: Σεπτέμβριος 2026",
+    tocTitle: "Περιεχόμενα",
+    closing:
+      "Η χρήση του ιστότοπου συνιστά πλήρη αποδοχή των παραπάνω όρων. Αν δεν συμφωνείς με κάποιον από αυτούς, παρακαλούμε μη χρησιμοποιήσεις τον ιστότοπο.",
+    contactLink: "Επικοινώνησε μαζί μας για ερωτήσεις σχετικά με τους όρους →",
+    sections: [
+      {
+        id: "acceptance",
+        heading: "Αποδοχή των Όρων",
+        body: [
+          'Ο παρών ιστότοπος ("MODUS LEGENDI", "εμείς", "η λέσχη") παρέχεται από τη φιλαναγνωστική ομάδα Modus Legendi. Με την πρόσβαση, την περιήγηση ή τη σύνδεσή σου στον ιστότοπο, αποδέχεσαι ανεπιφύλακτα τους παρόντες Όρους Χρήσης στο σύνολό τους.',
+          "Αν δεν συμφωνείς με οποιονδήποτε από τους όρους αυτούς, οφείλεις να μη χρησιμοποιήσεις τον ιστότοπο.",
+        ],
+      },
+      {
+        id: "definitions",
+        heading: "Ορισμοί",
+        body: [
+          '"Περιεχόμενο" νοείται κάθε κείμενο, δοκίμιο, κριτική, μετάφραση, φωτογραφία, εικόνα ή άλλο υλικό που δημοσιεύεται στον ιστότοπο από τα μέλη της συντακτικής ομάδας.',
+          '"Χρήστης" νοείται κάθε φυσικό πρόσωπο που αποκτά πρόσβαση στον ιστότοπο, με ή χωρίς σύνδεση μέσω λογαριασμού.',
+          '"Μέλος" ή "Συντάκτης" νοείται ο χρήστης στον οποίο έχει χορηγηθεί δικαίωμα δημοσίευσης Περιεχομένου από τη διαχείριση του ιστότοπου.',
+        ],
+      },
+      {
+        id: "intellectual-property",
+        heading: "Πνευματική Ιδιοκτησία & Απαγόρευση Αναδημοσίευσης",
+        body: [
+          "Το σύνολο του Περιεχομένου που δημοσιεύεται στον ιστότοπο —κείμενα, δοκίμια, κριτικές, μεταφράσεις, φωτογραφίες και κάθε άλλο υλικό— αποτελεί πνευματική ιδιοκτησία των αντίστοιχων συγγραφέων τους ή/και της Modus Legendi, και προστατεύεται από τις διατάξεις περί πνευματικής ιδιοκτησίας του ελληνικού και του διεθνούς δικαίου (Ν. 2121/1993 και διεθνείς συμβάσεις).",
+          "Απαγορεύεται ρητά η αντιγραφή, αναπαραγωγή, αναδημοσίευση, διανομή, τροποποίηση, μετάφραση ή εκμετάλλευση, εν όλω ή εν μέρει, οποιουδήποτε κειμένου ή υλικού του ιστότοπου, σε οποιαδήποτε μορφή ή μέσο (έντυπο, ψηφιακό, μέσα κοινωνικής δικτύωσης κ.λπ.), χωρίς την προηγούμενη γραπτή άδεια του συγγραφέα και της Modus Legendi.",
+          "Απαγορεύεται ειδικότερα η παρουσίαση κειμένων τρίτων ως δικών σου, καθώς και κάθε μορφή λογοκλοπής. Η αναφορά στην πηγή δεν υποκαθιστά την ανάγκη προηγούμενης άδειας για αναδημοσίευση ολόκληρου κειμένου.",
+          "Επιτρέπεται η σύντομη παράθεση αποσπάσματος (έως λίγων προτάσεων) με σαφή αναφορά στον συγγραφέα και ενεργό σύνδεσμο προς το πρωτότυπο κείμενο, στο πλαίσιο της δίκαιης χρήσης (fair use) για κριτική, σχολιασμό ή εκπαιδευτικούς σκοπούς.",
+          "Οποιαδήποτε παραβίαση της παρούσας ενότητας μπορεί να επισύρει νομικές συνέπειες σύμφωνα με την κείμενη νομοθεσία περί πνευματικής ιδιοκτησίας.",
+        ],
+      },
+      {
+        id: "accounts",
+        heading: "Λογαριασμοί & Σύνδεση",
+        body: [
+          "Η σύνδεση στον ιστότοπο πραγματοποιείται αποκλειστικά μέσω λογαριασμού Google. Είσαι αποκλειστικά υπεύθυνος/η για τη διαφύλαξη της ασφάλειας του λογαριασμού σου Google και για κάθε ενέργεια που πραγματοποιείται μέσω αυτού.",
+          "Η δυνατότητα δημοσίευσης Περιεχομένου (άρθρα, δοκίμια κ.λπ.) χορηγείται κατά την απόλυτη κρίση της διαχείρισης του ιστότοπου και μπορεί να ανακληθεί οποτεδήποτε.",
+          "Διατηρούμε το δικαίωμα αναστολής ή διαγραφής λογαριασμού χρήστη που παραβιάζει τους παρόντες όρους.",
+        ],
+      },
+      {
+        id: "acceptable-use",
+        heading: "Αποδεκτή Χρήση",
+        body: [
+          "Ο χρήστης αναλαμβάνει να μη χρησιμοποιεί τον ιστότοπο για παράνομους σκοπούς, ούτε με τρόπο που θα μπορούσε να βλάψει, να θέσει εκτός λειτουργίας, να επιβαρύνει υπέρμετρα ή να παρεμποδίσει την ομαλή λειτουργία του.",
+          "Απαγορεύεται η χρήση αυτοματοποιημένων εργαλείων (scraping, crawlers κ.λπ.) για συστηματική συλλογή περιεχομένου από τον ιστότοπο χωρίς προηγούμενη άδεια.",
+          "Απαγορεύεται η ανάρτηση περιεχομένου μέσω των φορμών επικοινωνίας ή υποβολής που είναι παράνομο, δυσφημιστικό, προσβλητικό ή παραβιάζει δικαιώματα τρίτων.",
+        ],
+      },
+      {
+        id: "submissions",
+        heading: "Υποβολές Κειμένων",
+        body: [
+          "Με την υποβολή κειμένου μέσω της φόρμας υποβολών ή επικοινωνίας, ο αποστολέας δηλώνει υπεύθυνα ότι είναι ο νόμιμος δημιουργός του κειμένου ή διαθέτει τα απαραίτητα δικαιώματα για την υποβολή του, και παραχωρεί στη Modus Legendi μη αποκλειστική άδεια αξιολόγησης, επιμέλειας και ενδεχόμενης δημοσίευσής του στον ιστότοπο, με αναφορά στο όνομα του συγγραφέα.",
+          "Η υποβολή κειμένου δεν συνεπάγεται αυτόματη δημοσίευση. Η επιλογή περιεχομένου προς δημοσίευση γίνεται κατά την κρίση της συντακτικής ομάδας.",
+          "Η πνευματική ιδιοκτησία του κειμένου παραμένει στον συγγραφέα, ο οποίος διατηρεί το δικαίωμα να ζητήσει την αφαίρεσή του από τον ιστότοπο.",
+        ],
+      },
+      {
+        id: "advertising",
+        heading: "Διαφημίσεις & Περιεχόμενο Τρίτων",
+        body: [
+          "Ο ιστότοπος ενδέχεται να εμφανίζει διαφημιστικό περιεχόμενο τρίτων. Η Modus Legendi δεν φέρει ευθύνη για το περιεχόμενο, την ακρίβεια ή τις πρακτικές ιστοσελίδων που συνδέονται μέσω διαφημίσεων.",
+          "Η εμφάνιση διαφήμισης δεν συνιστά έγκριση ή σύσταση του διαφημιζόμενου προϊόντος ή υπηρεσίας από τη Modus Legendi.",
+        ],
+      },
+      {
+        id: "liability",
+        heading: "Περιορισμός Ευθύνης",
+        body: [
+          'Το περιεχόμενο του ιστότοπου παρέχεται "ως έχει", χωρίς καμία εγγύηση, ρητή ή σιωπηρή, ως προς την ακρίβεια, την πληρότητα ή την καταλληλότητά του για συγκεκριμένο σκοπό.',
+          "Η Modus Legendi δεν ευθύνεται για οποιαδήποτε άμεση ή έμμεση ζημία προκύψει από τη χρήση ή την αδυναμία χρήσης του ιστότοπου.",
+        ],
+      },
+      {
+        id: "changes",
+        heading: "Τροποποιήσεις των Όρων",
+        body: [
+          "Διατηρούμε το δικαίωμα τροποποίησης των παρόντων Όρων Χρήσης οποτεδήποτε, χωρίς προηγούμενη ειδοποίηση. Οι τροποποιήσεις ισχύουν από τη στιγμή της ανάρτησής τους στον ιστότοπο.",
+          "Η συνέχιση της χρήσης του ιστότοπου μετά από τυχόν τροποποίηση συνιστά αποδοχή των νέων όρων.",
+        ],
+      },
+      {
+        id: "law",
+        heading: "Εφαρμοστέο Δίκαιο",
+        body: [
+          "Οι παρόντες όροι διέπονται από το Ελληνικό Δίκαιο. Για κάθε διαφορά που τυχόν προκύψει σχετικά με τη λειτουργία ή τη χρήση του ιστότοπου, αρμόδια ορίζονται τα Δικαστήρια της Αθήνας.",
+        ],
+      },
+    ],
+  },
 };
 
 type Dict = typeof el;
@@ -264,7 +363,7 @@ const en: Dict = {
     team: "The Team",
     interviews: "Interviews",
     magazine: "Magazine",
-    writings: "Writings",        // ← NEW
+    writings: "Writings",
     readingGroup: "Reading group",
     about: "About",
     submissions: "Submissions",
@@ -335,7 +434,7 @@ const en: Dict = {
     shareTitle: "Share",
     notFound: "This piece could not be found.",
   },
-    writings: {
+  writings: {
     kicker: "Archive of writings",
     title: "Writings",
     intro:
@@ -395,7 +494,7 @@ const en: Dict = {
       message: "Message",
       subject: "Subject",
       link: "Link (optional)",
-      file: "Textdatei",
+      file: "Manuscript file",
     },
     types: {
       essay: "Essay",
@@ -489,6 +588,105 @@ const en: Dict = {
     translations: "Translations",
     interviews: "Interviews",
   },
+  terms: {
+    kicker: "Legal",
+    title: "Terms of Use",
+    intro:
+      "Using the MODUS LEGENDI website requires acceptance of the terms below. Please read them carefully before signing in or using the site.",
+    lastUpdated: "Last updated: September 2026",
+    tocTitle: "Contents",
+    closing:
+      "Using this website constitutes full acceptance of the terms above. If you do not agree with any of them, please do not use the website.",
+    contactLink: "Contact us with questions about these terms →",
+    sections: [
+      {
+        id: "acceptance",
+        heading: "Acceptance of Terms",
+        body: [
+          'This website ("MODUS LEGENDI", "we", "the group") is provided by the Modus Legendi reading group. By accessing, browsing, or signing in to the website, you unconditionally accept these Terms of Use in full.',
+          "If you do not agree with any of these terms, you must not use the website.",
+        ],
+      },
+      {
+        id: "definitions",
+        heading: "Definitions",
+        body: [
+          '"Content" means any text, essay, review, translation, photograph, image, or other material published on the website by editorial team members.',
+          '"User" means any individual accessing the website, whether or not signed in through an account.',
+          '"Member" or "Editor" means a user who has been granted publishing rights by the site\'s administration.',
+        ],
+      },
+      {
+        id: "intellectual-property",
+        heading: "Intellectual Property & Prohibition on Reproduction",
+        body: [
+          "All Content published on the website — texts, essays, reviews, translations, photographs, and any other material — is the intellectual property of its respective authors and/or Modus Legendi, and is protected under Greek and international intellectual property law (Law 2121/1993 and international conventions).",
+          "It is strictly prohibited to copy, reproduce, republish, distribute, modify, translate, or otherwise exploit, in whole or in part, any text or material from the website, in any form or medium (print, digital, social media, etc.), without prior written permission from the author and Modus Legendi.",
+          "It is specifically prohibited to present the work of others as your own, including any form of plagiarism. Citing the source does not remove the need for prior permission to republish an entire text.",
+          "A short excerpt (a few sentences) may be quoted with clear attribution to the author and an active link to the original piece, under fair use for criticism, commentary, or educational purposes.",
+          "Any breach of this section may result in legal consequences under applicable intellectual property law.",
+        ],
+      },
+      {
+        id: "accounts",
+        heading: "Accounts & Sign-in",
+        body: [
+          "Sign-in to the website is available exclusively through a Google account. You are solely responsible for maintaining the security of your Google account and for any activity carried out through it.",
+          "The ability to publish Content (articles, essays, etc.) is granted at the sole discretion of the site's administration and may be revoked at any time.",
+          "We reserve the right to suspend or delete a user account that violates these terms.",
+        ],
+      },
+      {
+        id: "acceptable-use",
+        heading: "Acceptable Use",
+        body: [
+          "You agree not to use the website for any unlawful purpose, nor in any way that could damage, disable, overburden, or impair the proper functioning of the site.",
+          "Use of automated tools (scraping, crawlers, etc.) to systematically collect content from the website without prior permission is prohibited.",
+          "Posting content through the contact or submission forms that is unlawful, defamatory, offensive, or infringes third-party rights is prohibited.",
+        ],
+      },
+      {
+        id: "submissions",
+        heading: "Text Submissions",
+        body: [
+          "By submitting a text through the submission or contact form, the sender represents that they are the lawful author of the text or hold the necessary rights to submit it, and grants Modus Legendi a non-exclusive license to review, edit, and potentially publish it on the website, with attribution to the author.",
+          "Submitting a text does not guarantee publication. The selection of content for publication is at the discretion of the editorial team.",
+          "Copyright in the submitted text remains with its author, who retains the right to request its removal from the website.",
+        ],
+      },
+      {
+        id: "advertising",
+        heading: "Advertising & Third-Party Content",
+        body: [
+          "The website may display third-party advertising content. Modus Legendi is not responsible for the content, accuracy, or practices of websites linked through advertisements.",
+          "The appearance of an advertisement does not constitute endorsement of the advertised product or service by Modus Legendi.",
+        ],
+      },
+      {
+        id: "liability",
+        heading: "Limitation of Liability",
+        body: [
+          'The website\'s content is provided "as is", without any warranty, express or implied, as to its accuracy, completeness, or fitness for a particular purpose.',
+          "Modus Legendi is not liable for any direct or indirect damage arising from the use, or inability to use, the website.",
+        ],
+      },
+      {
+        id: "changes",
+        heading: "Changes to These Terms",
+        body: [
+          "We reserve the right to modify these Terms of Use at any time, without prior notice. Changes take effect as soon as they are posted on the website.",
+          "Continued use of the website after any modification constitutes acceptance of the new terms.",
+        ],
+      },
+      {
+        id: "law",
+        heading: "Governing Law",
+        body: [
+          "These terms are governed by Greek law. Any dispute arising in connection with the operation or use of the website shall fall under the jurisdiction of the Courts of Athens.",
+        ],
+      },
+    ],
+  },
 };
 
 const de: Dict = {
@@ -501,7 +699,7 @@ const de: Dict = {
     team: "Das Team",
     interviews: "Interviews",
     magazine: "Magazin",
-    writings: "Texte",        // ← NEU
+    writings: "Texte",
     readingGroup: "Lesekreis",
     about: "Über uns",
     submissions: "Einsendungen",
@@ -572,7 +770,7 @@ const de: Dict = {
     shareTitle: "Teilen",
     notFound: "Dieser Beitrag wurde nicht gefunden.",
   },
-    writings: {
+  writings: {
     kicker: "Archiv der Texte",
     title: "Texte",
     intro:
@@ -632,6 +830,7 @@ const de: Dict = {
       message: "Nachricht",
       subject: "Betreff",
       link: "Link (optional)",
+      file: "Textdatei",
     },
     types: {
       essay: "Essay",
@@ -724,6 +923,105 @@ const de: Dict = {
     reviews: "Kritiken",
     translations: "Übersetzungen",
     interviews: "Interviews",
+  },
+  terms: {
+    kicker: "Rechtliches",
+    title: "Nutzungsbedingungen",
+    intro:
+      "Die Nutzung der Website MODUS LEGENDI setzt die Annahme der folgenden Bedingungen voraus. Bitte lies sie sorgfältig, bevor du dich anmeldest oder die Website nutzt.",
+    lastUpdated: "Zuletzt aktualisiert: September 2026",
+    tocTitle: "Inhalt",
+    closing:
+      "Die Nutzung dieser Website stellt die vollständige Annahme der oben genannten Bedingungen dar. Falls du mit einer davon nicht einverstanden bist, nutze die Website bitte nicht.",
+    contactLink: "Kontaktiere uns bei Fragen zu diesen Bedingungen →",
+    sections: [
+      {
+        id: "acceptance",
+        heading: "Annahme der Bedingungen",
+        body: [
+          'Diese Website ("MODUS LEGENDI", "wir", "der Lesekreis") wird vom Lesekreis Modus Legendi betrieben. Durch den Zugriff, das Durchsuchen oder die Anmeldung auf der Website akzeptierst du diese Nutzungsbedingungen vollständig und vorbehaltlos.',
+          "Falls du mit einer dieser Bedingungen nicht einverstanden bist, darfst du die Website nicht nutzen.",
+        ],
+      },
+      {
+        id: "definitions",
+        heading: "Begriffsbestimmungen",
+        body: [
+          '"Inhalt" bezeichnet jeden Text, Essay, jede Kritik, Übersetzung, jedes Foto, Bild oder sonstiges Material, das von Mitgliedern der Redaktion auf der Website veröffentlicht wird.',
+          '"Nutzer" bezeichnet jede Person, die auf die Website zugreift, unabhängig davon, ob sie über ein Konto angemeldet ist.',
+          '"Mitglied" oder "Redakteur" bezeichnet einen Nutzer, dem von der Verwaltung der Website Veröffentlichungsrechte eingeräumt wurden.',
+        ],
+      },
+      {
+        id: "intellectual-property",
+        heading: "Geistiges Eigentum & Verbot der Vervielfältigung",
+        body: [
+          "Sämtliche auf der Website veröffentlichten Inhalte — Texte, Essays, Kritiken, Übersetzungen, Fotos und sonstiges Material — sind geistiges Eigentum der jeweiligen Autoren und/oder von Modus Legendi und werden durch das griechische und internationale Urheberrecht geschützt (Gesetz 2121/1993 und internationale Übereinkommen).",
+          "Es ist ausdrücklich untersagt, Texte oder Material der Website ganz oder teilweise zu kopieren, zu vervielfältigen, erneut zu veröffentlichen, zu verbreiten, zu verändern, zu übersetzen oder anderweitig zu verwerten, in gedruckter, digitaler oder sozialer Medienform, ohne vorherige schriftliche Zustimmung des Autors und von Modus Legendi.",
+          "Insbesondere ist es untersagt, fremde Texte als eigene auszugeben, einschließlich jeder Form von Plagiat. Die Angabe der Quelle ersetzt nicht die Notwendigkeit einer vorherigen Genehmigung zur vollständigen Wiederveröffentlichung eines Textes.",
+          "Ein kurzes Zitat (wenige Sätze) mit eindeutiger Nennung des Autors und einem aktiven Link zum Originaltext ist im Rahmen des fairen Gebrauchs (fair use) zu Kritik-, Kommentar- oder Bildungszwecken gestattet.",
+          "Jede Verletzung dieses Abschnitts kann rechtliche Konsequenzen nach geltendem Urheberrecht nach sich ziehen.",
+        ],
+      },
+      {
+        id: "accounts",
+        heading: "Konten & Anmeldung",
+        body: [
+          "Die Anmeldung auf der Website erfolgt ausschließlich über ein Google-Konto. Du bist allein verantwortlich für die Sicherheit deines Google-Kontos und für jede darüber ausgeführte Aktivität.",
+          "Die Möglichkeit, Inhalte (Artikel, Essays usw.) zu veröffentlichen, wird nach freiem Ermessen der Website-Verwaltung gewährt und kann jederzeit widerrufen werden.",
+          "Wir behalten uns das Recht vor, ein Nutzerkonto zu sperren oder zu löschen, das gegen diese Bedingungen verstößt.",
+        ],
+      },
+      {
+        id: "acceptable-use",
+        heading: "Zulässige Nutzung",
+        body: [
+          "Du verpflichtest dich, die Website nicht für rechtswidrige Zwecke zu nutzen und nicht in einer Weise, die die ordnungsgemäße Funktion der Website beschädigen, lahmlegen, überlasten oder beeinträchtigen könnte.",
+          "Die Verwendung automatisierter Werkzeuge (Scraping, Crawler usw.) zur systematischen Erfassung von Inhalten der Website ohne vorherige Genehmigung ist untersagt.",
+          "Das Einreichen von Inhalten über die Kontakt- oder Einsendeformulare, die rechtswidrig, verleumderisch, beleidigend sind oder Rechte Dritter verletzen, ist untersagt.",
+        ],
+      },
+      {
+        id: "submissions",
+        heading: "Texteinsendungen",
+        body: [
+          "Mit der Einsendung eines Textes über das Einsende- oder Kontaktformular erklärt der Absender, der rechtmäßige Urheber des Textes zu sein oder über die erforderlichen Rechte zu dessen Einsendung zu verfügen, und räumt Modus Legendi ein nicht-exklusives Recht ein, den Text zu prüfen, zu redigieren und gegebenenfalls unter Namensnennung des Autors auf der Website zu veröffentlichen.",
+          "Die Einsendung eines Textes garantiert keine Veröffentlichung. Die Auswahl der zu veröffentlichenden Inhalte liegt im Ermessen der Redaktion.",
+          "Das Urheberrecht am eingereichten Text verbleibt beim Autor, der das Recht behält, dessen Entfernung von der Website zu verlangen.",
+        ],
+      },
+      {
+        id: "advertising",
+        heading: "Werbung & Inhalte Dritter",
+        body: [
+          "Die Website kann Werbeinhalte Dritter anzeigen. Modus Legendi übernimmt keine Verantwortung für den Inhalt, die Richtigkeit oder die Praktiken von Websites, die über Werbung verlinkt sind.",
+          "Das Erscheinen einer Werbeanzeige stellt keine Empfehlung des beworbenen Produkts oder der Dienstleistung durch Modus Legendi dar.",
+        ],
+      },
+      {
+        id: "liability",
+        heading: "Haftungsbeschränkung",
+        body: [
+          'Die Inhalte der Website werden "wie besehen" bereitgestellt, ohne jegliche ausdrückliche oder stillschweigende Gewähr für ihre Richtigkeit, Vollständigkeit oder Eignung für einen bestimmten Zweck.',
+          "Modus Legendi haftet nicht für unmittelbare oder mittelbare Schäden, die aus der Nutzung oder der Unmöglichkeit der Nutzung der Website entstehen.",
+        ],
+      },
+      {
+        id: "changes",
+        heading: "Änderungen dieser Bedingungen",
+        body: [
+          "Wir behalten uns das Recht vor, diese Nutzungsbedingungen jederzeit ohne vorherige Ankündigung zu ändern. Änderungen treten mit ihrer Veröffentlichung auf der Website in Kraft.",
+          "Die fortgesetzte Nutzung der Website nach einer Änderung gilt als Zustimmung zu den neuen Bedingungen.",
+        ],
+      },
+      {
+        id: "law",
+        heading: "Anwendbares Recht",
+        body: [
+          "Diese Bedingungen unterliegen griechischem Recht. Für Streitigkeiten im Zusammenhang mit dem Betrieb oder der Nutzung der Website sind die Gerichte von Athen zuständig.",
+        ],
+      },
+    ],
   },
 };
 

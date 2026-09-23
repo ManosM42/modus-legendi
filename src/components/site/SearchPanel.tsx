@@ -2,14 +2,38 @@ import { useEffect, useId, useMemo, useRef, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { Search, X } from "lucide-react";
 import { useI18n } from "@/i18n";
-import { articles, formatDate } from "@/data/content";
+import { supabase } from "@/supabase/client";
+import type { ArticleWithRelations } from "@/lib/types";
+
+function formatDate(iso: string | null, locale: string): string {
+  if (!iso) return "";
+  const localeTag = locale === "el" ? "el-GR" : locale === "de" ? "de-DE" : "en-US";
+  return new Date(iso).toLocaleDateString(localeTag, { day: "numeric", month: "long", year: "numeric" });
+}
 
 export function SearchPanel({ open, onClose }: { open: boolean; onClose: () => void }) {
   const { locale, t } = useI18n();
   const [query, setQuery] = useState("");
+  const [allArticles, setAllArticles] = useState<ArticleWithRelations[]>([]);
+  const [loaded, setLoaded] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const dialogRef = useRef<HTMLDivElement>(null);
   const titleId = useId();
+
+  // Load the searchable index once the panel is first opened, not on every keystroke.
+  useEffect(() => {
+    if (!open || loaded) return;
+    void (async () => {
+      const { data } = await supabase
+        .from("articles")
+        .select("*, author:profiles(id, username, name, avatar_url), column:columns(id, slug, name)")
+        .eq("status", "published")
+        .order("published_at", { ascending: false, nullsFirst: false })
+        .order("created_at", { ascending: false });
+      setAllArticles((data as unknown as ArticleWithRelations[]) ?? []);
+      setLoaded(true);
+    })();
+  }, [open, loaded]);
 
   useEffect(() => {
     if (open) {
@@ -64,15 +88,15 @@ export function SearchPanel({ open, onClose }: { open: boolean; onClose: () => v
   const results = useMemo(() => {
     const term = query.trim().toLowerCase();
     if (term.length < 2) return [];
-    return articles
+    return allArticles
       .filter((article) =>
-        [article.title[locale], article.dek[locale], article.author, article.section]
+        [article.title, article.subtitle ?? "", article.author?.name ?? "", article.column?.name ?? ""]
           .join(" ")
           .toLowerCase()
           .includes(term),
       )
       .slice(0, 6);
-  }, [query, locale]);
+  }, [query, allArticles]);
 
   if (!open) return null;
 
@@ -124,23 +148,25 @@ export function SearchPanel({ open, onClose }: { open: boolean; onClose: () => v
         <div className="max-h-[60vh] overflow-y-auto p-2">
           {!hasQuery ? (
             <p className="px-3 py-6 text-sm text-muted-foreground">{t.search.start}</p>
+          ) : !loaded ? (
+            <p className="px-3 py-6 text-sm text-muted-foreground">{t.actions.loading}</p>
           ) : results.length === 0 ? (
             <p className="px-3 py-6 text-sm text-muted-foreground">{t.search.empty}</p>
           ) : (
             <ul aria-label={t.a11y.searchResults}>
               {results.map((article) => (
-                <li key={article.slug}>
+                <li key={article.id}>
                   <Link
-                    to="/magazine/$slug"
-                    params={{ slug: article.slug }}
+                    to="/article/$articleId"
+                    params={{ articleId: article.id }}
                     onClick={onClose}
                     className="block px-3 py-3 transition-colors hover:bg-secondary focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-ring"
                   >
-                    <span className="rule-label text-accent">{t.sections[article.section]}</span>
+                    <span className="rule-label text-accent">{article.column?.name}</span>
                     <span className="mt-1 block font-display text-lg leading-snug">
-                      {article.title[locale]}
+                      {article.title}
                     </span>
-                    <span className="rule-label">{formatDate(article.date, locale)}</span>
+                    <span className="rule-label">{formatDate(article.published_at, locale)}</span>
                   </Link>
                 </li>
               ))}

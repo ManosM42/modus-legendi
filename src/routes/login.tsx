@@ -2,6 +2,8 @@ import { useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowLeft } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
+import { useI18n } from "@/i18n";
+import { cn } from "@/lib/utils";
 import modusLogo from "@/assets/modus-logo.jpg";
 
 export const Route = createFileRoute("/login")({
@@ -19,9 +21,17 @@ export const Route = createFileRoute("/login")({
 
 function LoginPage() {
   const { signInWithGoogle } = useAuth();
+  const { t } = useI18n();
   const [loading, setLoading] = useState(false);
+  const [agreed, setAgreed] = useState(false);
+  const [showAgreementHint, setShowAgreementHint] = useState(false);
 
   const handleGoogleSignIn = async () => {
+    if (!agreed) {
+      setShowAgreementHint(true);
+      return;
+    }
+
     setLoading(true);
     try {
       await signInWithGoogle();
@@ -32,34 +42,78 @@ function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background px-5">
+    <div className="flex min-h-screen items-center justify-center bg-background px-5">
       <div className="w-full max-w-md text-center">
-        <Link to="/" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors mb-12 group">
+        <Link
+          to="/"
+          className="group mb-12 inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
+        >
           <ArrowLeft className="size-4 transition-transform group-hover:-translate-x-1" />
           Επιστροφή στην αρχική
         </Link>
 
         <div className="space-y-8">
           <div className="flex flex-col items-center">
-            <img src={modusLogo} alt="Modus Legendi" className="h-16 w-auto mb-6" />
-            <h1 className="font-display text-3xl text-foreground sm:text-4xl">
-              Καλώς ήρθες
-            </h1>
+            <img src={modusLogo} alt="Modus Legendi" className="mb-6 h-16 w-auto" />
+            <h1 className="font-display text-3xl text-foreground sm:text-4xl">Καλώς ήρθες</h1>
             <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
-              Συνδέσου με τον λογαριασμό σου στο Google για να αποκτήσεις πρόσβαση στην ψηφιακή βιβλιοθήκη και τα τελευταία κείμενα της ομάδας μας.
+              Συνδέσου με τον λογαριασμό σου στο Google για να αποκτήσεις πρόσβαση στην ψηφιακή
+              βιβλιοθήκη και τα τελευταία κείμενα της ομάδας μας.
             </p>
+          </div>
+
+          <div className="space-y-3 text-left">
+            <label
+              className={cn(
+                "flex cursor-pointer items-start gap-3 rounded-xl border p-4 text-sm transition-colors",
+                showAgreementHint && !agreed
+                  ? "border-destructive/50 bg-destructive/5"
+                  : "border-border bg-card",
+              )}
+            >
+              <input
+                type="checkbox"
+                checked={agreed}
+                onChange={(e) => {
+                  setAgreed(e.target.checked);
+                  if (e.target.checked) setShowAgreementHint(false);
+                }}
+                className="mt-0.5 size-4 shrink-0 rounded border-border accent-accent"
+              />
+              <span className="leading-relaxed text-foreground">
+                I have read and accept the Terms{" "}
+                <Link
+                  to="/terms"
+                  target="_blank"
+                  className="font-medium text-accent underline-offset-4 hover:underline"
+                >
+                  Όρους Χρήσης
+                </Link>{" "}
+                του Modus Legendi.
+              </span>
+            </label>
+            {showAgreementHint && !agreed && (
+              <p role="alert" className="text-xs text-destructive">
+                Χρειάζεται να αποδεχτείς τους Όρους Χρήσης για να συνδεθείς.
+              </p>
+            )}
           </div>
 
           <button
             onClick={handleGoogleSignIn}
             disabled={loading}
-            className="flex w-full items-center justify-center gap-3 rounded-xl border border-border bg-card px-4 py-4 font-medium text-foreground transition-all hover:bg-secondary disabled:opacity-60 shadow-sm"
+            className={cn(
+              "flex w-full items-center justify-center gap-3 rounded-xl border px-4 py-4 font-medium shadow-sm transition-all disabled:opacity-60",
+              agreed
+                ? "border-border bg-card text-foreground hover:bg-secondary"
+                : "border-border bg-card text-foreground/60 hover:bg-secondary/60",
+            )}
           >
             <GoogleIcon />
             {loading ? "Μεταφορά στο Google…" : "Συνέχεια με Google"}
           </button>
 
-          <p className="text-xs text-center text-muted-foreground opacity-60">
+          <p className="text-center text-xs text-muted-foreground opacity-60">
             Δεν έχεις πρόσβαση; Επικοινώνησε μαζί μας για να μάθεις περισσότερα για τη λέσχη.
           </p>
         </div>
