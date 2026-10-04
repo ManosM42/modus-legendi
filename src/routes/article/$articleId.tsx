@@ -252,8 +252,7 @@ function ArticlePage() {
 
           <div className="relative z-[1] mt-10 text-center">
             <Link
-              to="/column/$slug"
-              params={{ slug: article.column.slug }}
+              to="/writings"
               className="group inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.16em] text-muted-foreground transition-colors hover:text-accent"
             >
               <ArrowLeft
