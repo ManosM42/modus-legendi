@@ -77,6 +77,34 @@ const el = {
     emailPlaceholder: "Η διεύθυνση email σας",
     newsletterSuccess: "Ευχαριστούμε! Η εγγραφή σας καταχωρήθηκε.",
   },
+  landing: {
+    bookCta: "Διάβασε τα δημοσιευμένα κείμενα",
+    bookAria: "Modus Legendi — διάβασε τα δημοσιευμένα κείμενα",
+    signIn: "Συνδέσου στη Λέσχη",
+    latestLabel: "Τελευταίο κείμενο",
+    pillars: [
+      {
+        title: "Δοκίμιο & Κριτική",
+        text: "Κείμενα βάθους πάνω σε συγγραφείς και έργα, γραμμένα από μέλη της ομάδας μας.",
+      },
+      {
+        title: "Συναντήσεις ανάγνωσης",
+        text: "Μαζευόμαστε τακτικά για να συζητήσουμε ένα βιβλίο, με αργό ρυθμό και προσοχή στη λεπτομέρεια.",
+      },
+      {
+        title: "Μεταφράσεις & Συνεντεύξεις",
+        text: "Φέρνουμε κοντά μας φωνές από άλλες γλώσσες και ανθρώπους της λογοτεχνίας.",
+      },
+    ],
+    ctaTitle: "Μπες στη λέσχη.",
+    ctaText:
+      "Συνδέσου στη λέσχη για να ενημερώνεσαι για νέα, να διαβάζεις τα κείμενα και να συμμετέχεις στη συγγραφή τους.",
+    ctaButton: "Συνέχεια με Google",
+    welcome: "Καλώς ήρθες",
+    writeNew: "Γράψε νέο άρθρο",
+    writeFirst: "Γράψε το πρώτο άρθρο",
+    emptyFeed: "Δεν έχουν δημοσιευτεί κείμενα ακόμα — έλα ξανά σύντομα.",
+  },
   magazine: {
     title: "Περιοδικό",
     intro: "Δοκίμια, κριτικές, μεταφράσεις και συνεντεύξεις από τη σύνταξη και τους συνεργάτες μας.",
@@ -416,6 +444,34 @@ const en: Dict = {
     emailPlaceholder: "Your email address",
     newsletterSuccess: "Thank you! Your subscription is recorded.",
   },
+  landing: {
+    bookCta: "Read the published pieces",
+    bookAria: "Modus Legendi — read the published pieces",
+    signIn: "Sign in to the club",
+    latestLabel: "Latest piece",
+    pillars: [
+      {
+        title: "Essay & Criticism",
+        text: "In-depth pieces on authors and works, written by members of our team.",
+      },
+      {
+        title: "Reading meetings",
+        text: "We meet regularly to discuss a book, at a slow pace and with attention to detail.",
+      },
+      {
+        title: "Translations & Interviews",
+        text: "We bring in voices from other languages and the people who make literature.",
+      },
+    ],
+    ctaTitle: "Join the club.",
+    ctaText:
+      "Sign in to stay up to date with new pieces, read the texts and take part in writing them.",
+    ctaButton: "Continue with Google",
+    welcome: "Welcome",
+    writeNew: "Write a new article",
+    writeFirst: "Write the first article",
+    emptyFeed: "No pieces have been published yet — please come back soon.",
+  },
   magazine: {
     title: "Magazine",
     intro: "Essays, reviews, translations and interviews from our editors and contributors.",
@@ -751,6 +807,34 @@ const de: Dict = {
     newsletterText: "Ein Brief pro Monat: das nächste Buch, neue Beiträge, Termine.",
     emailPlaceholder: "Ihre E-Mail-Adresse",
     newsletterSuccess: "Danke! Ihre Anmeldung ist eingetragen.",
+  },
+  landing: {
+    bookCta: "Die veröffentlichten Texte lesen",
+    bookAria: "Modus Legendi — die veröffentlichten Texte lesen",
+    signIn: "Im Lesekreis anmelden",
+    latestLabel: "Neuester Beitrag",
+    pillars: [
+      {
+        title: "Essay & Kritik",
+        text: "Fundierte Beiträge über Autorinnen, Autoren und Werke, geschrieben von Mitgliedern unseres Teams.",
+      },
+      {
+        title: "Lesetreffen",
+        text: "Wir kommen regelmäßig zusammen, um ein Buch zu besprechen – in ruhigem Tempo und mit Blick fürs Detail.",
+      },
+      {
+        title: "Übersetzungen & Interviews",
+        text: "Wir holen Stimmen aus anderen Sprachen und Menschen der Literatur zu uns.",
+      },
+    ],
+    ctaTitle: "Werde Teil des Lesekreises.",
+    ctaText:
+      "Melde dich an, um über neue Beiträge informiert zu bleiben, die Texte zu lesen und selbst mitzuschreiben.",
+    ctaButton: "Weiter mit Google",
+    welcome: "Willkommen",
+    writeNew: "Neuen Artikel schreiben",
+    writeFirst: "Den ersten Artikel schreiben",
+    emptyFeed: "Es wurden noch keine Beiträge veröffentlicht – schau bald wieder vorbei.",
   },
   magazine: {
     title: "Magazin",
